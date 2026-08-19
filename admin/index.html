@@ -30,6 +30,24 @@
 </div>
 
 <h2>접수 현황</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<label style="font-weight:800;font-size:14px">기간</label>
+<select id="periodFilter" style="padding:10px;border:2px solid var(--line);border-radius:8px;font-size:14px" onchange="applyFilters()">
+<option value="all">전체</option>
+<option value="today">오늘</option>
+<option value="week">이번 주</option>
+<option value="month">이번 달</option>
+</select>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<label style="font-weight:800;font-size:14px">자격증</label>
+<select id="certificateFilter" style="padding:10px;border:2px solid var(--line);border-radius:8px;font-size:14px" onchange="applyFilters()">
+<option value="">전체</option>
+</select>
+</div>
+</div>
+
 <div class="table-wrapper">
 <table>
 <thead>
@@ -53,6 +71,7 @@
 const SUPABASE_URL = "https://ozducztaqcxpomomggve.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZHVjenRhcWN4cG9tb21nZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODI3MTMsImV4cCI6MjEwMjY1ODcxM30.tKdLUEkzqMYmSgB2sfgwdqEp3fkEy2yjP7GGEWY7Sxo";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let allData = [];
 
 async function loadData() {
   try {
@@ -62,45 +81,80 @@ async function loadData() {
       .order('received_at', { ascending: false });
 
     if (error) throw error;
+    allData = data || [];
 
-    const tbody = document.querySelector('#dataTable');
-    tbody.innerHTML = '';
-
-    if (!data || data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">접수 데이터가 없습니다.</td></tr>';
-      document.querySelector('#totalCount').textContent = '0';
-      document.querySelector('#todayCount').textContent = '0';
-      return;
-    }
-
-    const today = new Date().toDateString();
-    let todayCount = 0;
-
-    data.forEach(row => {
-      const date = new Date(row.received_at).toLocaleDateString('ko-KR');
-      if (new Date(row.received_at).toDateString() === today) {
-        todayCount++;
-      }
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${row.name}</td>
-        <td>${row.phone}</td>
-        <td>${row.certificate}</td>
-        <td>${date}</td>
-        <td>
-          <button class="button secondary" style="font-size:12px;padding:6px 12px" onclick="deleteRow('${row.id}')">삭제</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    document.querySelector('#totalCount').textContent = data.length;
-    document.querySelector('#todayCount').textContent = todayCount;
+    populateCertificateFilter();
+    applyFilters();
   } catch (err) {
     console.error('데이터 로드 오류:', err);
     document.querySelector('#dataTable').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">데이터 로드 중 오류가 발생했습니다.</td></tr>';
   }
+}
+
+function populateCertificateFilter() {
+  const certificates = [...new Set(allData.map(row => row.certificate).filter(Boolean))];
+  const select = document.querySelector('#certificateFilter');
+  const currentValue = select.value;
+
+  select.innerHTML = '<option value="">전체</option>';
+  certificates.forEach(cert => {
+    const option = document.createElement('option');
+    option.value = cert;
+    option.textContent = cert;
+    select.appendChild(option);
+  });
+
+  select.value = currentValue;
+}
+
+function applyFilters() {
+  const period = document.querySelector('#periodFilter').value;
+  const certificate = document.querySelector('#certificateFilter').value;
+
+  let filtered = allData;
+  const now = new Date();
+
+  if (period === 'today') {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    filtered = filtered.filter(row => new Date(row.received_at) >= today);
+  } else if (period === 'week') {
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    filtered = filtered.filter(row => new Date(row.received_at) >= weekAgo);
+  } else if (period === 'month') {
+    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    filtered = filtered.filter(row => new Date(row.received_at) >= monthAgo);
+  }
+
+  if (certificate) {
+    filtered = filtered.filter(row => row.certificate === certificate);
+  }
+
+  renderTable(filtered);
+}
+
+function renderTable(data) {
+  const tbody = document.querySelector('#dataTable');
+  tbody.innerHTML = '';
+
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">해당하는 접수 데이터가 없습니다.</td></tr>';
+    return;
+  }
+
+  data.forEach(row => {
+    const date = new Date(row.received_at).toLocaleDateString('ko-KR');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${row.name}</td>
+      <td>${row.phone}</td>
+      <td>${row.certificate}</td>
+      <td>${date}</td>
+      <td>
+        <button class="button secondary" style="font-size:12px;padding:6px 12px" onclick="deleteRow('${row.id}')">삭제</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
 async function deleteRow(id) {
