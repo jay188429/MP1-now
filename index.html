@@ -66,7 +66,7 @@ form.addEventListener('submit', async (e) => {
     certificate: document.querySelector('input[name="certificate"]:checked').value,
     name: document.querySelector('#name').value,
     phone: phoneClean,
-    created_at: new Date().toISOString()
+    received_at: new Date().toISOString()
   };
 
   try {
@@ -115,7 +115,7 @@ lookupButton.addEventListener('click', async () => {
     }
 
     const app = data[0];
-    const date = new Date(app.created_at).toLocaleDateString('ko-KR');
+    const date = new Date(app.received_at).toLocaleDateString('ko-KR');
     lookupResult.innerHTML = `<div class="status"><strong>접수 확인됨</strong><br>이름: ${app.name}<br>자격증: ${app.certificate}<br>접수일: ${date}</div>`;
   } catch (err) {
     console.error('조회 오류:', err);
