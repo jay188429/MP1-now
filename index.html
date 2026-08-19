@@ -38,3 +38,88 @@ const form = document.querySelector("#applicationForm");
 const phone = document.querySelector("#phone");
 const result = document.querySelector("#result");
 const lookupPhone = document.querySelector("#lookupPhone");
+const lookupButton = document.querySelector("#lookupButton");
+const lookupResult = document.querySelector("#lookupResult");
+const successModal = document.querySelector("#successModal");
+const closeModal = document.querySelector("#closeModal");
+
+function formatPhone(value) {
+  const cleaned = value.replace(/\D/g, '');
+  if (cleaned.length <= 3) return cleaned;
+  if (cleaned.length <= 7) return `${cleaned.slice(0, 3)}-${cleaned.slice(3)}`;
+  return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
+}
+
+phone.addEventListener('input', (e) => {
+  e.target.value = formatPhone(e.target.value);
+});
+
+lookupPhone.addEventListener('input', (e) => {
+  e.target.value = formatPhone(e.target.value);
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const phoneClean = document.querySelector('#phone').value.replace(/\D/g, '');
+  const formData = {
+    certificate: document.querySelector('input[name="certificate"]:checked').value,
+    name: document.querySelector('#name').value,
+    phone: phoneClean,
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    result.innerHTML = '<div class="status">접수 중입니다...</div>';
+
+    const { error } = await supabaseClient
+      .from('applications')
+      .insert([formData]);
+
+    if (error) throw error;
+
+    successModal.classList.add('is-open');
+    result.innerHTML = '';
+    form.reset();
+  } catch (err) {
+    console.error('제출 오류:', err);
+    result.innerHTML = `<div class="status error">접수 중 오류가 발생했습니다: ${err.message}</div>`;
+  }
+});
+
+closeModal.addEventListener('click', () => {
+  successModal.classList.remove('is-open');
+});
+
+lookupButton.addEventListener('click', async () => {
+  const phoneValue = lookupPhone.value.replace(/\D/g, '');
+
+  if (!phoneValue) {
+    lookupResult.textContent = '연락처를 입력해주세요.';
+    return;
+  }
+
+  try {
+    lookupResult.textContent = '조회 중입니다...';
+
+    const { data, error } = await supabaseClient
+      .from('applications')
+      .select('*')
+      .eq('phone', phoneValue);
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      lookupResult.textContent = '입력하신 연락처로 접수한 기록이 없습니다.';
+      return;
+    }
+
+    const app = data[0];
+    const date = new Date(app.created_at).toLocaleDateString('ko-KR');
+    lookupResult.innerHTML = `<div class="status"><strong>접수 확인됨</strong><br>이름: ${app.name}<br>자격증: ${app.certificate}<br>접수일: ${date}</div>`;
+  } catch (err) {
+    console.error('조회 오류:', err);
+    lookupResult.innerHTML = `<div class="status error">조회 중 오류가 발생했습니다: ${err.message}</div>`;
+  }
+});
+</script>
