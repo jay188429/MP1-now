@@ -1,40 +1,134 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NOW자격지원센터 | 관리자</title><style>
-:root{--ink:#17202a;--muted:#5b6670;--paper:#fffdf8;--blue:#075985;--line:#cbd5e1;--soft:#e0f2fe;--yellow:#facc15}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fefce8,#f0f9ff 55%,#ecfdf5);color:var(--ink);font:18px/1.55 "Apple SD Gothic Neo","Noto Sans KR",sans-serif}main{max-width:1240px;margin:auto;padding:26px 16px 60px}header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}h1,h2{line-height:1.2}h1{font-size:clamp(28px,4vw,40px);margin:0 0 8px}h2{font-size:26px;margin:0 0 15px}.eyebrow{color:var(--blue);font-weight:800}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav a,.button{min-height:50px;padding:10px 16px;border:2px solid var(--blue);border-radius:8px;background:var(--blue);color:#fff;text-decoration:none;font-weight:800;cursor:pointer;font:inherit}.nav a.secondary,.button.secondary{color:var(--blue);background:#fff}.panel{background:rgba(255,255,255,.93);border:1px solid var(--line);border-radius:12px;padding:22px;margin-top:20px;box-shadow:0 8px 24px #17202a12}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{border-left:6px solid var(--yellow);background:#fff;padding:16px;border-radius:8px}.stat strong{font-size:30px;display:block}.controls{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end}label{font-weight:800;display:grid;gap:6px}input,select,textarea{font:inherit;padding:10px 12px;border:2px solid #94a3b8;border-radius:8px;min-height:50px;background:#fff;color:var(--ink)}textarea{min-height:110px;resize:vertical}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:900px;background:#fff}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#e0f2fe;white-space:nowrap}.faq-row{display:grid;grid-template-columns:160px 1fr 1fr;gap:12px;border-top:1px solid var(--line);padding:16px 0}.faq-row input,.faq-row textarea{width:100%}.savebar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.message{font-weight:800;color:#166534}@media(max-width:760px){main{padding:16px 10px}.stats{grid-template-columns:repeat(2,1fr)}.controls{grid-template-columns:1fr}.faq-row{grid-template-columns:1fr}}
-</style><style>
-:root{--ink:#1d1d1f;--muted:#6e6e73;--paper:#f5f5f7;--blue:#0071e3;--blue-dark:#0066cc;--line:#d2d2d7;--soft:#e8f2ff;--yellow:#fff4cc}*{letter-spacing:0}body{background:radial-gradient(circle at 50% -20%,#fff 0,#f5f5f7 48%,#e8e8ed 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px;line-height:1.5}main{max-width:1240px;padding:44px 24px 76px}header{margin-bottom:32px}h1{font-size:clamp(32px,5vw,50px);font-weight:700}h2{font-size:25px;font-weight:650}.eyebrow{font-size:14px;color:var(--blue);letter-spacing:.01em}.nav{gap:8px}.nav a,.button{min-height:44px;padding:9px 16px;border:0;border-radius:999px;background:var(--blue);box-shadow:0 5px 14px #0071e326;font-size:15px;font-weight:650;transition:background .2s ease,transform .2s ease,box-shadow .2s ease}.nav a:hover,.button:hover{background:var(--blue-dark);box-shadow:0 8px 20px #0071e333;transform:translateY(-1px)}.nav a.secondary,.button.secondary{background:#fff;color:var(--blue);box-shadow:0 1px 4px #1d1d1f14}.panel{background:rgba(255,255,255,.86);border:1px solid rgba(210,210,215,.8);border-radius:18px;padding:28px;margin-top:22px;box-shadow:0 12px 35px #1d1d1f0d;backdrop-filter:blur(18px)}.stats{gap:14px}.stat{border:1px solid #e2e2e7;border-left:4px solid #f0b900;background:#fff;padding:17px;border-radius:14px;box-shadow:0 3px 12px #1d1d1f08}.stat strong{font-size:30px;font-weight:650}.controls{gap:14px}label{font-size:14px;font-weight:650}input,select,textarea{padding:11px 13px;border:1px solid #c7c7cc;border-radius:11px;background:#fff;color:var(--ink);min-height:46px;box-shadow:inset 0 1px 2px #1d1d1f0a;outline:0}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px #0071e326}.table-wrap{border:1px solid #e2e2e7;border-radius:14px;background:#fff}table{background:#fff}th{background:#f5f5f7;color:#515154;font-size:13px;font-weight:650}th,td{padding:13px 12px}td{font-size:14px}.faq-row{border-top:1px solid #e2e2e7;padding:18px 0}.message{color:#167346}@media(max-width:760px){main{padding:24px 16px 52px}.panel{padding:21px;border-radius:16px}.stats{gap:10px}.nav a{flex:0 1 auto}}
-</style><style>h1,h2,p,.stat,.message{word-break:keep-all}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../supabase-config.js"></script><script>window.va=window.va||function(){(window.va.q=window.va.q||[]).push(arguments)};</script><script defer src="/_vercel/insights/script.js"></script></head><body><main>
-<header><div><div class="eyebrow">NOW자격지원센터</div><h1>관리자</h1></div><nav class="nav"><a href="../index.html">접수 화면</a><a class="secondary" href="../faq/index.html">FAQ 챗봇</a></nav></header>
-<section class="panel"><h2>접수 통계</h2><div class="stats"><div class="stat"><span>오늘 접수 건수</span><strong id="todayCount">0</strong></div><div class="stat"><span>전체 신청</span><strong id="totalCount">0</strong></div><div class="stat"><span>공인중개사</span><strong id="brokerCount">0</strong></div><div class="stat"><span>사회복지사 2급 / 전기기능사</span><strong id="otherCount">0 / 0</strong></div></div></section>
-<section class="panel"><h2>접수 내역</h2><div class="controls"><label>검색<input id="search" placeholder="이름, 연락처, 주소"></label><label>자격증<select id="certificateFilter"><option value="">전체 자격증</option></select></label><label>상태<select id="statusFilter"><option value="">전체 상태</option><option>접수대기</option><option>확인</option><option>완료</option></select></label><button class="button secondary" id="refresh" type="button">새로고침</button></div><p id="dataMessage" class="message" role="status">data 폴더의 접수 데이터를 불러오는 중입니다.</p><div class="table-wrap"><table><thead><tr><th>접수일시</th><th>이름</th><th>연락처</th><th>자격증</th><th>생년월일</th><th>주소</th><th>접수경로</th><th>상태</th><th>비고</th><th>출처</th></tr></thead><tbody id="applicationRows"></tbody></table></div></section>
-<section class="panel"><h2>챗봇 기준값</h2><div class="controls" style="grid-template-columns:1fr 2fr"><label>Threshold<input id="threshold" type="number" min="1" max="20"></label><label>유사어 사전 <textarea id="synonyms" placeholder="응시료: 접수비,시험비,돈 얼마"></textarea></label></div><p>한 줄에 하나씩 <b>기준어: 유사어, 유사어</b> 형식으로 적습니다.</p><button class="button" id="saveSettings" type="button">기준값과 유사어 저장</button> <span class="message" id="settingsMessage" role="status"></span></section>
-<section class="panel"><div class="savebar"><h2>FAQ 문서 24개</h2><button class="button" id="saveFaq" type="button">FAQ 전체 저장</button></div><p>질문이나 답변을 고치면 챗봇 화면에 즉시 반영됩니다.</p><div id="faqEditor"></div><span class="message" id="faqMessage" role="status"></span></section>
-</main><script>
-const CERTS=["공인중개사(전문자격사)","사회복지사 2급(국가자격)","전기기능사(큐넷 국가기술자격)"];const FAQ_KEY="nowFaq";const SETTINGS_KEY="nowFaqSettings";const APP_KEY="nowApplications";
-const supabaseClient=supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);const DATA_FILES=[
-	["../data/draft_100/national_draft.txt","draft_100 국가기술자격"],
-	["../data/draft_100/professional_draft.txt","draft_100 전문자격"],
-	["../data/draft_100/health_draft.txt","draft_100 보건"],
-	["../data/real_1000/national_real.txt","real_1000 국가기술자격"],
-	["../data/real_1000/professional_real.txt","real_1000 전문자격"],
-	["../data/real_1000/health_real.txt","real_1000 보건"]
-];
-let csvApplications=[];let remoteApplications=[];
-const defaultFaq=[
-["공인중개사(전문자격사)","공인중개사 1차 필기 접수 기간과 시험일은 언제인가요?","2026년 제37회 1차 접수기간은 08.03~08.07이며, 시험일은 10.31입니다. (현재 올해 1차 접수는 마감되었습니다)"],["공인중개사(전문자격사)","원서 접수는 몇 시부터 시작되나요?","공인중개사는 전문자격으로 접수 첫날 오전 09:00부터 두두넷 전용 사이트에서 시작됩니다."],["공인중개사(전문자격사)","공인중개사 1차 시험 접수비(응시료)는 얼마인가요?","사내 안내 규정상 응시료 금액이 확인되지 않아 답변해 드릴 수 없습니다. 공식 전용 사이트에서 확인해 주세요."],["공인중개사(전문자격사)","1차 시험에 합격하면 다음 시험에서 1차가 면제되나요?","1차 시험 합격 시 다음 회차 1회에 한해 1차 시험이 면제됩니다. (단, 정확한 규정은 공식 안내를 참조하세요)"],["공인중개사(전문자격사)","2차/실기 시험 접수도 여기서 해주나요?","저희 센터는 필기(1차) 접수만 도와드립니다. 2차 및 실기 관련 안내는 제공하지 않습니다."],["공인중개사(전문자격사)","시험 당일 지참해야 하는 준비물은 무엇인가요?","수험표, 신분증, 필기구(흑색 사인펜)를 반드시 지참하셔야 합니다."],["공인중개사(전문자격사)","시험장에 주차 공간이 지원되나요?","시험장마다 주차 가능 여부가 다르므로 저희가 안내해 드릴 수 없습니다. (모르겠습니다)"],["공인중개사(전문자격사)","접수 후 취소하면 환불은 어떻게 되나요?","접수 기간 내 취소 시 100% 환불되며, 마감 후 시험 5일 전까지는 50% 환불, 시험 4일 전부터는 환불이 불가합니다."],
-["사회복지사 2급(국가자격)","사회복지사 2급 필기시험 일정은 어떻게 되나요?","사회복지사 2급은 별도의 필기시험 없이 지정된 학점/과목 이수 및 현장실습으로 취득하는 자격입니다."],["사회복지사 2급(국가자격)","사회복지사 2급 발급 수수료나 접수비는 얼마인가요?","안내 규정에 수수료 금액이 명시되어 있지 않아 정확한 금액은 답변해 드릴 수 없습니다."],["사회복지사 2급(국가자격)","현장실습이나 실기 접수도 여기서 신청받나요?","저희 센터는 국가기술자격 필기 접수 안내 창구로, 사회복지사 현장실습/실기는 접수해 드리지 않습니다."],["사회복지사 2급(국가자격)","사회복지사 2급 이수 과목이나 응시 자격을 가르쳐주세요.","상세 교육 과정 및 응시 자격 조건은 규정에 확인되지 않아 답변하기 어렵습니다. (모르겠습니다)"],["사회복지사 2급(국가자격)","환불 신청을 하면 돈은 언제 들어오나요?","접수 취소 처리 후 환불금 입금까지 최대 7일이 소요되며, 입금자명은 '토스페이먼츠'로 표시됩니다."],["사회복지사 2급(국가자격)","전화나 방문으로 접수할 수 없나요?","원서 접수는 온라인(인터넷/모바일)으로만 가능하며, 방문 접수 및 전화 접수는 진행하지 않습니다."],["사회복지사 2급(국가자격)","등록할 사진의 규격 조건이 어떻게 되나요?","6개월 이내 촬영한 3.5x4.5cm 컬러 상반신 정면 사진(모자/배경 없음)이어야 합니다."],["사회복지사 2급(국가자격)","합격 후 자격증은 언제 나오나요?","자격증 발급 기관 소관 사항으로 저희 센터에서는 안내가 불가능합니다."],
-["전기기능사(큐넷 국가기술자격)","전기기능사 필기 원서접수 일정은 언제인가요?","전기기능사는 정기 연 4회 시행되며, 가장 가깝게는 제4회 필기접수(08.24~08.27), 시험일(09.16~09.21)입니다."],["전기기능사(큐넷 국가기술자격)","전기기능사 필기 접수비(응시료)는 얼마인가요?","전기기능사 필기 응시료는 14,500원입니다."],["전기기능사(큐넷 국가기술자격)","필기시험 시간과 시험 방식은 어떻게 되나요?","시험시간은 60분이며, 컴퓨터로 문제를 푸는 CBT 방식으로 진행되어 시험 종료 즉시 합격 여부를 알 수 있습니다."],["전기기능사(큐넷 국가기술자격)","전기기능사 필기에 합격하면 면제 기간이 얼마나 되나요?","국가기술자격법에 따라 필기시험 합격 발표일로부터 2년간 필기시험이 면제됩니다."],["전기기능사(큐넷 국가기술자격)","전기기능사 실기 접수도 같이할 수 있나요?","저희 센터는 필기 접수만 도와드립니다. 실기시험 접수는 직접 큐넷을 통해 진행하셔야 합니다."],["전기기능사(큐넷 국가기술자격)","접수 시작 시간과 가상계좌 입금 기한은 언제인가요?","접수는 첫날 오전 10:00에 시작하며, 가상계좌는 지정된 마감일시 14:00까지 입금해야 자동 취소되지 않습니다."],["전기기능사(큐넷 국가기술자격)","계산기나 휴대폰을 시험장에 가지고 갈 수 있나요?","허용된 지정 공학용 계산기만 사용 가능하며, 휴대폰·스마트워치 등 통신기기는 시험 전 전원을 꺼야 하며 소지 시 무효 처리됩니다."],["전기기능사(큐넷 국가기술자격)","시험장 주차 지원이나 합격 가능 여부를 알려주세요.","시험장 주차 지원 여부 및 개개인의 합격 가능성은 저희가 알 수 없습니다. (모르겠습니다)"]].map((item,index)=>({id:index+1,certificate:item[0],question:item[1],answer:item[2]}));
-function faqData(){let data=JSON.parse(localStorage.getItem(FAQ_KEY)||"null");if(!data||data.length!==24){data=defaultFaq;localStorage.setItem(FAQ_KEY,JSON.stringify(data))}return data}
-function applications(){const browserApplications=JSON.parse(localStorage.getItem(APP_KEY)||"[]");return remoteApplications.length?[...remoteApplications,...browserApplications]:[...csvApplications,...browserApplications]}
-async function loadSupabaseApplications(){const rows=[];for(let offset=0;;offset+=1000){const {data,error}=await supabaseClient.from("applications").select("*").order("received_at",{ascending:false}).range(offset,offset+999);if(error)throw error;rows.push(...(data||[]));if(!data||data.length<1000)break}remoteApplications=rows.map(row=>({...row,id:row.id,receivedAt:row.received_at,readOnly:false,source:"Supabase applications"}));document.querySelector("#dataMessage").textContent=remoteApplications.length?`Supabase applications에서 ${remoteApplications.length.toLocaleString("ko-KR")}건을 불러왔습니다.`:`Supabase 데이터가 없어 data 폴더의 ${csvApplications.length.toLocaleString("ko-KR")}건을 표시합니다.`;render()}
-function parseCsv(text){const rows=[];let row=[];let cell="";let quoted=false;for(let i=0;i<text.length;i++){const char=text[i];const next=text[i+1];if(char==='"'&&quoted&&next==='"'){cell+='"';i++;continue}if(char==='"'){quoted=!quoted;continue}if(char===','&&!quoted){row.push(cell);cell="";continue}if((char==='\n'||char==='\r')&&!quoted){if(char==='\r'&&next==='\n')i++;row.push(cell);if(row.some(value=>value.trim()))rows.push(row);row=[];cell="";continue}cell+=char}if(cell||row.length){row.push(cell);rows.push(row)}const headers=rows.shift().map(value=>value.trim());return rows.map(values=>Object.fromEntries(headers.map((header,index)=>[header,(values[index]||"").trim()])))}
-function firstValue(row,names){for(const name of names){if(row[name])return row[name]}return ""}
-function normalizeCsvRow(row,source){const isNational=Boolean(row["성명"]||row["접수번호"]);const isHealth=Boolean(row.examNumber);return {id:`csv-${source}-${firstValue(row,["접수번호","receipt_no","examNumber"])}`,name:firstValue(row,["성명","applicant_name","fullName"]),phone:firstValue(row,["연락처","contact_number","mobile"]),certificate:firstValue(row,["자격종목","qualification","certType"]),birth:firstValue(row,["생년월일","date_of_birth","birthday"]),address:[firstValue(row,["시험지역","exam_region"]),firstValue(row,["시험장","exam_center","centerName"])].filter(Boolean).join(" "),receivedAt:firstValue(row,["접수일시","registered_at","appliedAt"]),status:firstValue(row,["접수상태","app_status","regStatus"])||"확인",route:firstValue(row,["사용맥락","usage_context"]),note:isHealth?firstValue(row,["교육기관","trainingOrg"]):isNational?firstValue(row,["등급","grade"]):firstValue(row,["시험유형","exam_type"]),source,readOnly:true}}
-async function loadCsvApplications(){const results=await Promise.all(DATA_FILES.map(async([path,source])=>{const response=await fetch(path);if(!response.ok)throw new Error(`${path}: ${response.status}`);const text=await response.text();return parseCsv(text).map(row=>normalizeCsvRow(row,source))}));csvApplications=results.flat();const filter=document.querySelector("#certificateFilter");[...new Set(csvApplications.map(row=>row.certificate).filter(Boolean))].forEach(certificate=>{if(![...filter.options].some(option=>option.value===certificate))filter.insertAdjacentHTML("beforeend",`<option>${escapeHtml(certificate)}</option>`)});document.querySelector("#dataMessage").textContent=`data 폴더에서 ${csvApplications.length.toLocaleString("ko-KR")}건을 불러왔습니다.`;render()}
-function render(){const apps=applications();const query=document.querySelector("#search").value.trim().toLowerCase();const cert=document.querySelector("#certificateFilter").value;const status=document.querySelector("#statusFilter").value;const rows=apps.filter(a=>(!query||[a.name,a.phone,a.address].join(" ").toLowerCase().includes(query))&&(!cert||a.certificate===cert)&&(!status||a.status===status));document.querySelector("#applicationRows").innerHTML=rows.map(a=>`<tr><td>${new Date(a.receivedAt).toLocaleString("ko-KR")}</td><td>${a.name}</td><td>${a.phone}</td><td>${a.certificate}</td><td>${a.birth}</td><td>${a.address}</td><td>${a.route||"-"}</td><td><select data-id="${a.id}" class="status-edit"><option ${a.status==="접수대기"?"selected":""}>접수대기</option><option ${a.status==="확인"?"selected":""}>확인</option><option ${a.status==="완료"?"selected":""}>완료</option></select></td><td>${a.note||"-"}</td></tr>`).join("")||'<tr><td colspan="9">조건에 맞는 접수 내역이 없습니다.</td></tr>';const today=new Date().toLocaleDateString("ko-KR");document.querySelector("#todayCount").textContent=apps.filter(a=>new Date(a.receivedAt).toLocaleDateString("ko-KR")===today).length;document.querySelector("#totalCount").textContent=apps.length;const counts=CERTS.map(c=>apps.filter(a=>a.certificate===c).length);document.querySelector("#brokerCount").textContent=counts[0];document.querySelector("#otherCount").textContent=`${counts[1]} / ${counts[2]}`;document.querySelectorAll(".status-edit").forEach(select=>select.addEventListener("change",()=>{const updated=applications().map(a=>a.id===select.dataset.id?{...a,status:select.value}:a);localStorage.setItem(APP_KEY,JSON.stringify(updated));render()}))}
-function escapeHtml(value){return String(value??"").replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]))}
-function formatDate(value){const parsed=new Date(String(value).replace(/\//g,"-"));return Number.isNaN(parsed.getTime())?value:new Intl.DateTimeFormat("ko-KR",{dateStyle:"short",timeStyle:"short"}).format(parsed)}
-function render(){const apps=applications();const query=document.querySelector("#search").value.trim().toLowerCase();const cert=document.querySelector("#certificateFilter").value;const status=document.querySelector("#statusFilter").value;const rows=apps.filter(a=>(!query||[a.name,a.phone,a.address,a.certificate,a.source].join(" ").toLowerCase().includes(query))&&(!cert||a.certificate===cert)&&(!status||a.status===status));document.querySelector("#applicationRows").innerHTML=rows.map(a=>`<tr><td>${escapeHtml(formatDate(a.receivedAt))}</td><td>${escapeHtml(a.name)}</td><td>${escapeHtml(a.phone)}</td><td>${escapeHtml(a.certificate)}</td><td>${escapeHtml(a.birth)}</td><td>${escapeHtml(a.address)}</td><td>${escapeHtml(a.route||"-")}</td><td>${a.readOnly?escapeHtml(a.status):`<select data-id="${escapeHtml(a.id)}" class="status-edit"><option ${a.status==="접수대기"?"selected":""}>접수대기</option><option ${a.status==="확인"?"selected":""}>확인</option><option ${a.status==="완료"?"selected":""}>완료</option></select>`}</td><td>${escapeHtml(a.note||"-")}</td><td>${escapeHtml(a.source||"브라우저 접수")}</td></tr>`).join("")||'<tr><td colspan="10">조건에 맞는 접수 내역이 없습니다.</td></tr>';const today=new Date().toLocaleDateString("ko-KR");document.querySelector("#todayCount").textContent=apps.filter(a=>new Date(String(a.receivedAt).replace(/\//g,"-")).toLocaleDateString("ko-KR")===today).length;document.querySelector("#totalCount").textContent=apps.length;const counts=CERTS.map(c=>apps.filter(a=>a.certificate===c).length);document.querySelector("#brokerCount").textContent=counts[0];document.querySelector("#otherCount").textContent=`${counts[1]} / ${counts[2]}`;document.querySelectorAll(".status-edit").forEach(select=>select.addEventListener("change",()=>{const updated=JSON.parse(localStorage.getItem(APP_KEY)||"[]").map(a=>a.id===select.dataset.id?{...a,status:select.value}:a);localStorage.setItem(APP_KEY,JSON.stringify(updated));render()}))}
-function renderFaq(){document.querySelector("#faqEditor").innerHTML=faqData().map((f,i)=>`<div class="faq-row"><label>자격증<input data-f="certificate" data-i="${i}" value="${f.certificate}"></label><label>질문<textarea data-f="question" data-i="${i}">${f.question}</textarea></label><label>답변<textarea data-f="answer" data-i="${i}">${f.answer}</textarea></label></div>`).join("")}
-CERTS.forEach(c=>document.querySelector("#certificateFilter").insertAdjacentHTML("beforeend",`<option>${c}</option>`));document.querySelectorAll("#search,#certificateFilter,#statusFilter").forEach(e=>e.addEventListener("input",render));document.querySelector("#refresh").addEventListener("click",render);const settings=JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}");document.querySelector("#threshold").value=settings.threshold||2;document.querySelector("#synonyms").value=Object.entries(settings.synonyms||{응시료:["접수비","시험비","돈 얼마"],필기:["1차","이론","쓰는 거"],굴착기:["포크레인"],지게차운전기능사:["지게차 면허"],사회복지사:["요양사"]}).map(([k,v])=>`${k}: ${v.join(",")}`).join("\n");document.querySelector("#saveSettings").addEventListener("click",()=>{const synonyms={};document.querySelector("#synonyms").value.split("\n").forEach(line=>{const [key,values]=line.split(":");if(key&&values)synonyms[key.trim()]=values.split(",").map(v=>v.trim()).filter(Boolean)});localStorage.setItem(SETTINGS_KEY,JSON.stringify({threshold:Number(document.querySelector("#threshold").value)||2,synonyms}));document.querySelector("#settingsMessage").textContent="저장했습니다. 챗봇에 즉시 반영됩니다."});document.querySelector("#saveFaq").addEventListener("click",()=>{const data=faqData();document.querySelectorAll("[data-f]").forEach(input=>data[Number(input.dataset.i)][input.dataset.f]=input.value);localStorage.setItem(FAQ_KEY,JSON.stringify(data));document.querySelector("#faqMessage").textContent="FAQ 24개를 저장했습니다."});render();renderFaq();
-</script><script>loadCsvApplications().then(()=>loadSupabaseApplications()).catch(error=>{document.querySelector("#dataMessage").textContent=`데이터를 불러오지 못했습니다: ${error.message}`;console.error(error)});</script></body></html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOW자격지원센터 | 관리자</title>
+<style>
+:root{--ink:#17202a;--muted:#5b6670;--paper:#fffdf8;--blue:#075985;--blue-dark:#064e73;--yellow:#facc15;--line:#cbd5e1;--soft:#e0f2fe;--danger:#b42318}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fefce8 0,#f0f9ff 52%,#ecfdf5 100%);color:var(--ink);font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px;line-height:1.6}main{max-width:1200px;margin:auto;padding:28px 18px 60px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:32px;margin:0;font-weight:700}h2{font-size:20px;margin:20px 0 12px}table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(23,32,42,.08)}.table-wrapper{overflow-x:auto}th{background:var(--blue);color:white;padding:12px;text-align:left;font-weight:800}td{padding:12px;border-bottom:1px solid var(--line)}tr:hover{background:#f9f9f9}.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border:2px solid var(--blue);border-radius:8px;background:var(--blue);color:white;text-decoration:none;font-weight:800;cursor:pointer;font-size:14px}.button.danger{background:var(--danger);border-color:var(--danger)}.button.secondary{background:white;color:var(--blue)}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}.stat-card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08)}.stat-number{font-size:32px;font-weight:800;color:var(--blue)}.stat-label{color:var(--muted);font-size:14px;margin-top:4px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div>
+<h1>관리자 대시보드</h1>
+<p style="color: var(--muted); margin: 4px 0 0;">접수 현황 관리</p>
+</div>
+<button class="button secondary" onclick="logout()">로그아웃</button>
+</header>
+
+<div class="stats">
+<div class="stat-card">
+<div class="stat-number" id="totalCount">0</div>
+<div class="stat-label">총 접수</div>
+</div>
+<div class="stat-card">
+<div class="stat-number" id="todayCount">0</div>
+<div class="stat-label">오늘 접수</div>
+</div>
+</div>
+
+<h2>접수 현황</h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>전화번호</th>
+<th>자격증</th>
+<th>접수일</th>
+<th>관리</th>
+</tr>
+</thead>
+<tbody id="dataTable">
+<tr><td colspan="5" style="text-align:center;color:var(--muted)">데이터 로딩 중...</td></tr>
+</tbody>
+</table>
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://ozducztaqcxpomomggve.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZHVjenRhcWN4cG9tb21nZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODI3MTMsImV4cCI6MjEwMjY1ODcxM30.tKdLUEkzqMYmSgB2sfgwdqEp3fkEy2yjP7GGEWY7Sxo";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function loadData() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('applications')
+      .select('*')
+      .order('received_at', { ascending: false });
+
+    if (error) throw error;
+
+    const tbody = document.querySelector('#dataTable');
+    tbody.innerHTML = '';
+
+    if (!data || data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">접수 데이터가 없습니다.</td></tr>';
+      document.querySelector('#totalCount').textContent = '0';
+      document.querySelector('#todayCount').textContent = '0';
+      return;
+    }
+
+    const today = new Date().toDateString();
+    let todayCount = 0;
+
+    data.forEach(row => {
+      const date = new Date(row.received_at).toLocaleDateString('ko-KR');
+      if (new Date(row.received_at).toDateString() === today) {
+        todayCount++;
+      }
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${row.name}</td>
+        <td>${row.phone}</td>
+        <td>${row.certificate}</td>
+        <td>${date}</td>
+        <td>
+          <button class="button secondary" style="font-size:12px;padding:6px 12px" onclick="deleteRow('${row.id}')">삭제</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.querySelector('#totalCount').textContent = data.length;
+    document.querySelector('#todayCount').textContent = todayCount;
+  } catch (err) {
+    console.error('데이터 로드 오류:', err);
+    document.querySelector('#dataTable').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">데이터 로드 중 오류가 발생했습니다.</td></tr>';
+  }
+}
+
+async function deleteRow(id) {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('applications')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    alert('삭제되었습니다.');
+    loadData();
+  } catch (err) {
+    alert('삭제 중 오류가 발생했습니다.');
+    console.error(err);
+  }
+}
+
+function logout() {
+  if (confirm('로그아웃 하시겠습니까?')) {
+    window.location.href = '/';
+  }
+}
+
+loadData();
+setInterval(loadData, 5000);
+</script>
+</body>
+</html>
