@@ -2,3 +2,6 @@
 **/*.csv
 **/.DS_Store
 .vercel
+faq/.venv/
+__pycache__/
+*.py[cod]
