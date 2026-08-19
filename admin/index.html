@@ -9,7 +9,20 @@
 </style>
 </head>
 <body>
-<main>
+<div id="passwordModal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+<div style="background:white;padding:30px;border-radius:12px;box-shadow:0 24px 70px rgba(23,32,42,.33);width:min(100%,400px)">
+<h2 style="margin:0 0 10px">관리자 접근</h2>
+<p style="color:var(--muted);margin:0 0 20px">비밀번호를 입력하세요</p>
+<input type="password" id="passwordInput" placeholder="비밀번호" style="width:100%;padding:12px;border:2px solid var(--line);border-radius:8px;margin-bottom:12px;font-size:16px">
+<p id="passwordStatus" style="color:var(--danger);font-weight:800;margin:12px 0 0;display:none">비밀번호 없음</p>
+<div style="display:flex;gap:12px;margin-top:16px">
+<button class="button secondary" style="flex:1" onclick="checkPassword()">확인</button>
+<button class="button secondary" style="flex:1" onclick="showNoPassword()">취소</button>
+</div>
+</div>
+</div>
+
+<main style="display:none" id="mainContent">
 <header>
 <div>
 <h1>관리자 대시보드</h1>
@@ -68,6 +81,30 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const ADMIN_PASSWORD = '';
+
+function checkPassword() {
+  const input = document.querySelector('#passwordInput').value;
+
+  if (ADMIN_PASSWORD === '' || input === ADMIN_PASSWORD) {
+    document.querySelector('#passwordModal').style.display = 'none';
+    document.querySelector('#mainContent').style.display = 'block';
+    loadData();
+  } else {
+    document.querySelector('#passwordStatus').textContent = '비밀번호가 틀렸습니다';
+    document.querySelector('#passwordStatus').style.display = 'block';
+  }
+}
+
+function showNoPassword() {
+  document.querySelector('#passwordStatus').textContent = '비밀번호 없음';
+  document.querySelector('#passwordStatus').style.display = 'block';
+}
+
+document.querySelector('#passwordInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') checkPassword();
+});
+
 const SUPABASE_URL = "https://ozducztaqcxpomomggve.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZHVjenRhcWN4cG9tb21nZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODI3MTMsImV4cCI6MjEwMjY1ODcxM30.tKdLUEkzqMYmSgB2sfgwdqEp3fkEy2yjP7GGEWY7Sxo";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
