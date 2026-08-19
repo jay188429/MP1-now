@@ -136,13 +136,22 @@ function renderTable(data) {
   const tbody = document.querySelector('#dataTable');
   tbody.innerHTML = '';
 
+  const today = new Date().toDateString();
+  let todayCount = 0;
+
   if (!data || data.length === 0) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">해당하는 접수 데이터가 없습니다.</td></tr>';
+    document.querySelector('#totalCount').textContent = '0';
+    document.querySelector('#todayCount').textContent = '0';
     return;
   }
 
   data.forEach(row => {
     const date = new Date(row.received_at).toLocaleDateString('ko-KR');
+    if (new Date(row.received_at).toDateString() === today) {
+      todayCount++;
+    }
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${row.name}</td>
@@ -155,6 +164,9 @@ function renderTable(data) {
     `;
     tbody.appendChild(tr);
   });
+
+  document.querySelector('#totalCount').textContent = data.length;
+  document.querySelector('#todayCount').textContent = todayCount;
 }
 
 async function deleteRow(id) {
