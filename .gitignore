@@ -1,5 +1,4 @@
 .env
-**/*.csv
 **/.DS_Store
 .vercel
 faq/.venv/
