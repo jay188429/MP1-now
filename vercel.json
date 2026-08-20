@@ -1,5 +1,8 @@
 {
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/admin(.*)", "destination": "/admin.html" },
+    { "source": "/faq(.*)", "destination": "/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
