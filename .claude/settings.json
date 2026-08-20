@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m 'Admin 통계 필터 적용 *)",
+      "Bash(git commit -m 'Admin 비밀번호 인증 추가 *)"
+    ]
+  }
+}

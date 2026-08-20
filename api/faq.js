@@ -1,43 +1,24 @@
 import fetch from 'node-fetch';
 
-// FAQ 데이터 (파일 읽기 대신 직접 포함)
-const FAQ = [
-  {
-    "id": 1,
-    "cert": "한식조리기능사",
-    "title": "한식조리기능사 시험비",
-    "keywords": ["한식", "시험비", "비용", "접수료"],
-    "text": "한식조리기능사 시험비는 실기 70,000원, 필기 14,500원입니다."
-  },
-  {
-    "id": 2,
-    "cert": "사회복지사",
-    "title": "사회복지사 시험 과목",
-    "keywords": ["사회복지사", "과목", "시험"],
-    "text": "사회복지사 2급 필기시험 과목은 사회복지기초, 인간행동과사회환경, 사회복지정책론, 사회복지법제, 사회복지실천론, 사회복지실천기술론 등 6과목입니다."
-  },
-  {
-    "id": 3,
-    "cert": "전기기능사",
-    "title": "전기기능사 시험 규정",
-    "keywords": ["전기기능사", "계산기", "반입", "규정"],
-    "text": "전기기능사 실기시험에서 계산기(일반용) 반입은 허용됩니다. 단, 프로그래밍 기능이 있는 계산기는 불허합니다."
-  },
-  {
-    "id": 4,
-    "cert": "공인중개사",
-    "title": "공인중개사 환불 규정",
-    "keywords": ["공인중개사", "환불", "반환", "규정"],
-    "text": "공인중개사 자격시험 응시료는 합격자에 한해 자격증 발급 후 1년 이내 환불 신청이 가능합니다."
-  },
-  {
-    "id": 5,
-    "cert": "요양보호사",
-    "title": "요양보호사 합격 기준",
-    "keywords": ["요양보호사", "합격", "점수", "기준"],
-    "text": "요양보호사 시험 합격 기준은 필기시험 100점 만점에 60점 이상, 실기시험도 100점 만점에 60점 이상입니다."
+let FAQ = [];
+let faqLoaded = false;
+
+async function loadFAQ() {
+  try {
+    const response = await fetch('https://mp1-now.vercel.app/faq.json');
+    if (response.ok) {
+      FAQ = await response.json();
+      faqLoaded = true;
+      console.log(`✓ FAQ 로드 완료: ${FAQ.length}개 항목`);
+    }
+  } catch (error) {
+    console.error('FAQ 로드 실패:', error);
   }
-];
+}
+
+// 시작 시 FAQ 로드 (배포 후 재로드도 주기적으로)
+loadFAQ();
+setInterval(loadFAQ, 300000);
 
 function tokenize(text) {
   const tokens = text.match(/[가-힣A-Za-z0-9]+/g) || [];
