@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOW자격지원센터 | 관리자</title>
+<style>
+:root{--ink:#17202a;--muted:#5b6670;--paper:#fffdf8;--blue:#075985;--blue-dark:#064e73;--yellow:#facc15;--line:#cbd5e1;--soft:#e0f2fe;--danger:#b42318}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fefce8 0,#f0f9ff 52%,#ecfdf5 100%);color:var(--ink);font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px;line-height:1.6}main{max-width:1200px;margin:auto;padding:28px 18px 60px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:32px;margin:0;font-weight:700}h2{font-size:20px;margin:20px 0 12px}table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(23,32,42,.08)}.table-wrapper{overflow-x:auto}th{background:var(--blue);color:white;padding:12px;text-align:left;font-weight:800}td{padding:12px;border-bottom:1px solid var(--line)}tr:hover{background:#f9f9f9}.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border:2px solid var(--blue);border-radius:8px;background:var(--blue);color:white;text-decoration:none;font-weight:800;cursor:pointer;font-size:14px}.button.danger{background:var(--danger);border-color:var(--danger)}.button.secondary{background:white;color:var(--blue)}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}.stat-card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08)}.stat-number{font-size:32px;font-weight:800;color:var(--blue)}.stat-label{color:var(--muted);font-size:14px;margin-top:4px}
+</style>
+</head>
+<body>
+<div id="passwordModal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+<div style="background:white;padding:30px;border-radius:12px;box-shadow:0 24px 70px rgba(23,32,42,.33);width:min(100%,400px)">
+<h2 style="margin:0 0 10px">관리자 접근</h2>
+<p style="color:var(--muted);margin:0 0 5px">비밀번호를 입력하세요</p>
+<p style="color:var(--danger);font-weight:800;margin:0 0 20px;font-size:14px">⚠️ 비밀번호 없음</p>
+<input type="password" id="passwordInput" placeholder="비밀번호" style="width:100%;padding:12px;border:2px solid var(--line);border-radius:8px;margin-bottom:12px;font-size:16px">
+<p id="passwordStatus" style="color:var(--danger);font-weight:800;margin:12px 0 0;display:none">비밀번호 없음</p>
+<div style="display:flex;gap:12px;margin-top:16px">
+<button class="button secondary" style="flex:1" onclick="checkPassword()">확인</button>
+<button class="button secondary" style="flex:1" onclick="showNoPassword()">취소</button>
+</div>
+</div>
+</div>
+
+<main style="display:none" id="mainContent">
+<header>
+<div>
+<h1>관리자 대시보드</h1>
+<p style="color: var(--muted); margin: 4px 0 0;">접수 현황 관리</p>
+</div>
+<button class="button secondary" onclick="logout()">로그아웃</button>
+</header>
+
+<div class="stats">
+<div class="stat-card">
+<div class="stat-number" id="totalCount">0</div>
+<div class="stat-label">총 접수</div>
+</div>
+<div class="stat-card">
+<div class="stat-number" id="todayCount">0</div>
+<div class="stat-label">오늘 접수</div>
+</div>
+</div>
+
+<h2>접수 현황</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
+<div style="display:flex;flex-direction:column;gap:4px">
+<label style="font-weight:800;font-size:14px">기간</label>
+<select id="periodFilter" style="padding:10px;border:2px solid var(--line);border-radius:8px;font-size:14px" onchange="applyFilters()">
+<option value="all">전체</option>
+<option value="today">오늘</option>
+<option value="week">이번 주</option>
+<option value="month">이번 달</option>
+</select>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<label style="font-weight:800;font-size:14px">자격증</label>
+<select id="certificateFilter" style="padding:10px;border:2px solid var(--line);border-radius:8px;font-size:14px" onchange="applyFilters()">
+<option value="">전체</option>
+</select>
+</div>
+</div>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>이름</th>
+<th>전화번호</th>
+<th>자격증</th>
+<th>접수일</th>
+<th>관리</th>
+</tr>
+</thead>
+<tbody id="dataTable">
+<tr><td colspan="5" style="text-align:center;color:var(--muted)">데이터 로딩 중...</td></tr>
+</tbody>
+</table>
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const ADMIN_PASSWORD = '';
+
+function checkPassword() {
+  const input = document.querySelector('#passwordInput').value;
+
+  if (ADMIN_PASSWORD === '' || input === ADMIN_PASSWORD) {
+    document.querySelector('#passwordModal').style.display = 'none';
+    document.querySelector('#mainContent').style.display = 'block';
+    loadData();
+  } else {
+    document.querySelector('#passwordStatus').textContent = '비밀번호가 틀렸습니다';
+    document.querySelector('#passwordStatus').style.display = 'block';
+  }
+}
+
+function showNoPassword() {
+  document.querySelector('#passwordStatus').textContent = '비밀번호 없음';
+  document.querySelector('#passwordStatus').style.display = 'block';
+}
+
+document.querySelector('#passwordInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') checkPassword();
+});
+
+const SUPABASE_URL = "https://ozducztaqcxpomomggve.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZHVjenRhcWN4cG9tb21nZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODI3MTMsImV4cCI6MjEwMjY1ODcxM30.tKdLUEkzqMYmSgB2sfgwdqEp3fkEy2yjP7GGEWY7Sxo";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let allData = [];
+
+async function loadData() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('applications')
+      .select('*')
+      .order('received_at', { ascending: false });
+
+    if (error) throw error;
+    allData = data || [];
+
+    populateCertificateFilter();
+    applyFilters();
+  } catch (err) {
+    console.error('데이터 로드 오류:', err);
+    document.querySelector('#dataTable').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">데이터 로드 중 오류가 발생했습니다.</td></tr>';
+  }
+}
+
+function populateCertificateFilter() {
+  const certificates = [...new Set(allData.map(row => row.certificate).filter(Boolean))];
+  const select = document.querySelector('#certificateFilter');
+  const currentValue = select.value;
+
+  select.innerHTML = '<option value="">전체</option>';
+  certificates.forEach(cert => {
+    const option = document.createElement('option');
+    option.value = cert;
+    option.textContent = cert;
+    select.appendChild(option);
+  });
+
+  select.value = currentValue;
+}
+
+function applyFilters() {
+  const period = document.querySelector('#periodFilter').value;
+  const certificate = document.querySelector('#certificateFilter').value;
+
+  let filtered = allData;
+  const now = new Date();
+
+  if (period === 'today') {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    filtered = filtered.filter(row => new Date(row.received_at) >= today);
+  } else if (period === 'week') {
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    filtered = filtered.filter(row => new Date(row.received_at) >= weekAgo);
+  } else if (period === 'month') {
+    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    filtered = filtered.filter(row => new Date(row.received_at) >= monthAgo);
+  }
+
+  if (certificate) {
+    filtered = filtered.filter(row => row.certificate === certificate);
+  }
+
+  renderTable(filtered);
+}
+
+function renderTable(data) {
+  const tbody = document.querySelector('#dataTable');
+  tbody.innerHTML = '';
+
+  const today = new Date().toDateString();
+  let todayCount = 0;
+
+  if (!data || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">해당하는 접수 데이터가 없습니다.</td></tr>';
+    document.querySelector('#totalCount').textContent = '0';
+    document.querySelector('#todayCount').textContent = '0';
+    return;
+  }
+
+  data.forEach(row => {
+    const date = new Date(row.received_at).toLocaleDateString('ko-KR');
+    if (new Date(row.received_at).toDateString() === today) {
+      todayCount++;
+    }
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${row.name}</td>
+      <td>${row.phone}</td>
+      <td>${row.certificate}</td>
+      <td>${date}</td>
+      <td>
+        <button class="button secondary" style="font-size:12px;padding:6px 12px" onclick="deleteRow('${row.id}')">삭제</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.querySelector('#totalCount').textContent = data.length;
+  document.querySelector('#todayCount').textContent = todayCount;
+}
+
+async function deleteRow(id) {
+  if (!confirm('정말 삭제하시겠습니까?')) return;
+
+  try {
+    const { error } = await supabaseClient
+      .from('applications')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    alert('삭제되었습니다.');
+    loadData();
+  } catch (err) {
+    alert('삭제 중 오류가 발생했습니다.');
+    console.error(err);
+  }
+}
+
+function logout() {
+  if (confirm('로그아웃 하시겠습니까?')) {
+    window.location.href = '/';
+  }
+}
+
+loadData();
+setInterval(loadData, 5000);
+</script>
+</body>
+</html>

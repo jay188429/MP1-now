@@ -1,24 +1,7 @@
-import fetch from 'node-fetch';
+// Node.js 18+ 내장 fetch 사용
 
 let FAQ = [];
 let faqLoaded = false;
-
-async function loadFAQ() {
-  try {
-    const response = await fetch('https://mp1-now.vercel.app/faq.json');
-    if (response.ok) {
-      FAQ = await response.json();
-      faqLoaded = true;
-      console.log(`✓ FAQ 로드 완료: ${FAQ.length}개 항목`);
-    }
-  } catch (error) {
-    console.error('FAQ 로드 실패:', error);
-  }
-}
-
-// 시작 시 FAQ 로드 (배포 후 재로드도 주기적으로)
-loadFAQ();
-setInterval(loadFAQ, 300000);
 
 function tokenize(text) {
   const tokens = text.match(/[가-힣A-Za-z0-9]+/g) || [];
@@ -36,7 +19,7 @@ function retrieve(question, topK = 3, minScore = 2) {
 
     const qTokens = tokenize(row.title + ' ' + row.text);
     const overlap = Array.from(q).filter(token => qTokens.has(token)).length;
-    
+
     const score = keywordHits + overlap;
     ranked.push([score, row]);
   }
@@ -89,7 +72,7 @@ ${document.text}
 
 async function answerQuestion(question) {
   const results = retrieve(question);
-  
+
   if (results.length === 0) {
     return {
       status: 'UNKNOWN',
@@ -100,7 +83,7 @@ async function answerQuestion(question) {
   }
 
   const [bestScore, bestDoc] = results[0];
-  
+
   try {
     const generated = await callGemini(buildPrompt(question, bestDoc));
 
@@ -129,7 +112,25 @@ async function answerQuestion(question) {
   }
 }
 
-export default async function handler(req, res) {
+async function loadFAQ() {
+  try {
+    const response = await fetch('https://mp1-now.vercel.app/faq.json');
+    if (response.ok) {
+      FAQ = await response.json();
+      faqLoaded = true;
+      console.log(`✓ FAQ 로드 완료: ${FAQ.length}개 항목`);
+    } else {
+      console.error(`FAQ 로드 실패: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('FAQ 로드 오류:', error.message);
+  }
+}
+
+// 핸들러 실행 시 FAQ 로드
+const faqPromise = loadFAQ();
+
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -149,10 +150,20 @@ export default async function handler(req, res) {
   }
 
   try {
+    // FAQ가 아직 로드되지 않았으면 기다리기
+    if (!faqLoaded) {
+      await faqPromise;
+    }
+
+    // FAQ가 여전히 로드되지 않았으면 재시도
+    if (!faqLoaded || FAQ.length === 0) {
+      await loadFAQ();
+    }
+
     const result = await answerQuestion(message);
     return res.status(200).json(result);
   } catch (error) {
     console.error('Error:', error);
     return res.status(500).json({ error: error.message });
   }
-}
+};
