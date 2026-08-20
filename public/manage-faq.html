@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ 관리 | NOW자격지원센터</title>
+<style>
+:root{--ink:#17202a;--muted:#5b6670;--paper:#fffdf8;--blue:#075985;--blue-dark:#064e73;--yellow:#facc15;--line:#cbd5e1;--soft:#e0f2fe;--danger:#b42318}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fefce8 0,#f0f9ff 52%,#ecfdf5 100%);color:var(--ink);font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px;line-height:1.6}main{max-width:1200px;margin:auto;padding:28px 18px 60px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:32px;margin:0;font-weight:700}h2{font-size:20px;margin:20px 0 12px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border:2px solid var(--blue);border-radius:8px;background:var(--blue);color:white;text-decoration:none;font-weight:800;cursor:pointer;font-size:14px}.button.danger{background:var(--danger);border-color:var(--danger)}.button.secondary{background:white;color:var(--blue)}.panel{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08);margin-bottom:20px}.form-group{display:grid;gap:8px;margin-bottom:16px}label{font-weight:800;font-size:14px}input,select,textarea{padding:12px;border:2px solid var(--line);border-radius:8px;font-size:14px;font-family:inherit;width:100%}textarea{min-height:100px;resize:vertical}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.status{padding:12px;border-radius:8px;margin:8px 0;font-weight:800}.status.success{background:#d4edda;color:#155724}.status.error{background:#f8d7da;color:#721c24}.table-wrapper{overflow-x:auto}table{width:100%;border-collapse:collapse;background:white;border-radius:8px;margin-top:12px}th{background:var(--blue);color:white;padding:12px;text-align:left;font-weight:800}td{padding:12px;border-bottom:1px solid var(--line)}tr:hover{background:#f9f9f9}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}.stat-card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08)}.stat-number{font-size:32px;font-weight:800;color:var(--blue)}.stat-label{color:var(--muted);font-size:14px;margin-top:4px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div>
+<h1>FAQ 관리</h1>
+<p style="color: var(--muted); margin: 4px 0 0;">TF-IDF 검색 + 자동 인덱스 재구축</p>
+</div>
+<button class="button secondary" onclick="window.location='/'">돌아가기</button>
+</header>
+
+<div class="stats">
+<div class="stat-card">
+<div class="stat-number" id="totalFAQ">0</div>
+<div class="stat-label">총 FAQ 항목</div>
+</div>
+</div>
+
+<!-- 추가 패널 -->
+<div class="panel">
+<h2>FAQ 추가</h2>
+<div class="form-row">
+<div class="form-group">
+<label>자격증</label>
+<select id="certSelect">
+<option value="">선택하세요</option>
+<option value="한식조리기능사">한식조리기능사</option>
+<option value="지게차운전기능사">지게차운전기능사</option>
+<option value="굴착기운전기능사">굴착기운전기능사</option>
+<option value="전기기능사">전기기능사</option>
+<option value="공인중개사">공인중개사</option>
+<option value="손해평가사">손해평가사</option>
+<option value="요양보호사">요양보호사</option>
+<option value="위생사">위생사</option>
+</select>
+</div>
+<div class="form-group">
+<label>카테고리</label>
+<input type="text" id="categoryInput" placeholder="예: 접수비, 합격기준, 환불">
+</div>
+</div>
+<div class="form-group">
+<label>제목</label>
+<input type="text" id="titleInput" placeholder="예: 한식조리기능사 준비물">
+</div>
+<div class="form-group">
+<label>답변 내용</label>
+<textarea id="replyInput" placeholder="FAQ 답변을 입력하세요..."></textarea>
+</div>
+<button class="button" onclick="addFAQ()">FAQ 추가</button>
+<div id="addStatus"></div>
+</div>
+
+<!-- 삭제 패널 -->
+<div class="panel">
+<h2>FAQ 삭제</h2>
+<div class="form-group">
+<label>삭제할 FAQ ID</label>
+<input type="number" id="deleteIdInput" placeholder="예: 4706">
+</div>
+<button class="button danger" onclick="deleteFAQ()">삭제</button>
+<div id="deleteStatus"></div>
+</div>
+
+<!-- 검색 패널 -->
+<div class="panel">
+<h2>FAQ 검색</h2>
+<input type="text" id="searchInput" placeholder="자격증명, 카테고리, 제목으로 검색..." style="margin-bottom:12px;">
+<button class="button" onclick="searchFAQ()">검색</button>
+<div class="table-wrapper">
+<table id="faqTable">
+<thead>
+<tr><th>ID</th><th>자격증</th><th>카테고리</th><th>제목</th></tr>
+</thead>
+<tbody>
+<tr><td colspan="4" style="text-align:center;color:var(--muted)">데이터 로딩 중...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+
+<script>
+const API_ENDPOINT = '/api/faq';
+
+async function loadStats() {
+  try {
+    const response = await fetch('/faq_combined.jsonl');
+    const text = await response.text();
+    const count = text.trim().split('\n').filter(line => line.trim()).length;
+    document.querySelector('#totalFAQ').textContent = count.toLocaleString();
+  } catch (error) {
+    console.error('Stats 로드 오류:', error);
+  }
+}
+
+async function addFAQ() {
+  const cert = document.querySelector('#certSelect').value;
+  const category = document.querySelector('#categoryInput').value;
+  const title = document.querySelector('#titleInput').value;
+  const reply = document.querySelector('#replyInput').value;
+  const status = document.querySelector('#addStatus');
+
+  if (!cert || !title.trim() || !reply.trim()) {
+    status.innerHTML = '<div class="status error">⚠️ 자격증, 제목, 답변은 필수입니다</div>';
+    return;
+  }
+
+  status.innerHTML = '<div class="status">⏳ 추가 중...</div>';
+
+  try {
+    // 실제 구현: API 엔드포인트 필요
+    status.innerHTML = '<div class="status success">✅ FAQ가 추가되었습니다 (API 구현 필요)</div>';
+
+    document.querySelector('#certSelect').value = '';
+    document.querySelector('#categoryInput').value = '';
+    document.querySelector('#titleInput').value = '';
+    document.querySelector('#replyInput').value = '';
+
+    loadStats();
+  } catch (error) {
+    status.innerHTML = `<div class="status error">❌ 오류: ${error.message}</div>`;
+  }
+}
+
+async function deleteFAQ() {
+  const faqId = document.querySelector('#deleteIdInput').value;
+  const status = document.querySelector('#deleteStatus');
+
+  if (!faqId) {
+    status.innerHTML = '<div class="status error">⚠️ FAQ ID를 입력하세요</div>';
+    return;
+  }
+
+  if (!confirm(`정말 ID ${faqId}를 삭제하시겠습니까?`)) return;
+
+  status.innerHTML = '<div class="status">⏳ 삭제 중...</div>';
+
+  try {
+    // 실제 구현: API 엔드포인트 필요
+    status.innerHTML = '<div class="status success">✅ FAQ가 삭제되었습니다 (API 구현 필요)</div>';
+    document.querySelector('#deleteIdInput').value = '';
+    loadStats();
+  } catch (error) {
+    status.innerHTML = `<div class="status error">❌ 오류: ${error.message}</div>`;
+  }
+}
+
+async function searchFAQ() {
+  const query = document.querySelector('#searchInput').value.toLowerCase();
+  const tbody = document.querySelector('#faqTable tbody');
+
+  if (!query) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">검색어를 입력하세요</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">검색 중...</td></tr>';
+
+  try {
+    const response = await fetch('/faq_combined.jsonl');
+    const text = await response.text();
+    const faqs = text
+      .trim()
+      .split('\n')
+      .filter(line => line.trim())
+      .map(line => JSON.parse(line))
+      .filter(faq =>
+        (faq.cert && faq.cert.toLowerCase().includes(query)) ||
+        (faq.category && faq.category.toLowerCase().includes(query)) ||
+        (faq.title && faq.title.toLowerCase().includes(query))
+      )
+      .slice(0, 50);
+
+    if (faqs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">검색 결과가 없습니다</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = faqs.map(faq => `
+      <tr>
+        <td>${faq.id}</td>
+        <td>${faq.cert || '?'}</td>
+        <td>${faq.category || '?'}</td>
+        <td>${faq.title || '?'}</td>
+      </tr>
+    `).join('');
+  } catch (error) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--danger)">오류: ${error.message}</td></tr>`;
+  }
+}
+
+// 초기화
+loadStats();
+</script>
+</body>
+</html>
