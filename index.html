@@ -179,9 +179,24 @@ function initFAQChat() {
     messageInput.value = '';
     sendBtn.disabled = true;
 
+    // 버퍼 메시지 (CS 에이전트 스타일)
+    const bufferMessages = [
+      "알겠습니다. 관련 내용을 검색하고 있습니다...",
+      "최적의 답변을 준비 중입니다...",
+      "정보를 정리한 후 말씀드리겠습니다..."
+    ];
+
     const loadingDiv = document.createElement('div');
     loadingDiv.style.cssText = 'padding:12px 16px;border-radius:8px;background:#f0f0f0;align-self:flex-start;max-width:80%';
-    loadingDiv.innerHTML = '<div style="display:inline-block;width:20px;height:20px;border:3px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite"></div>';
+
+    let bufferIndex = 0;
+    const bufferInterval = setInterval(() => {
+      if (bufferIndex < bufferMessages.length) {
+        loadingDiv.innerHTML = bufferMessages[bufferIndex];
+        bufferIndex++;
+      }
+    }, 800);
+
     messagesDiv.appendChild(loadingDiv);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
@@ -192,6 +207,7 @@ function initFAQChat() {
         body: JSON.stringify({ message })
       });
 
+      clearInterval(bufferInterval);
       messagesDiv.removeChild(loadingDiv);
 
       if (!response.ok) throw new Error('API 오류');
@@ -199,6 +215,7 @@ function initFAQChat() {
       const result = await response.json();
       addMessage(result.answer, false, result.source);
     } catch (error) {
+      clearInterval(bufferInterval);
       messagesDiv.removeChild(loadingDiv);
       addMessage(`오류: ${error.message}`, false);
     } finally {
