@@ -86,7 +86,7 @@ function cosineSimilarity(vecA, vecB) {
   return dotProduct / (normA * normB);
 }
 
-function retrieve(question, topK = 3, minScore = 0.05) {
+function retrieve(question, topK = 3, minScore = 0.01) {
   if (!FAQ.length || !docTermFreq.length) return [];
 
   const expandedQuestion = expandSynonyms(question);
