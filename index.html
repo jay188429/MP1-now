@@ -15,7 +15,19 @@
 <script>window.va=window.va||function(){(window.va.q=window.va.q||[]).push(arguments)};</script><script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-<main>
+<div id="faqPage" style="display:none;max-width:900px;margin:auto;padding:28px 18px 60px">
+<header style="margin-bottom:26px"><h1 style="font-size:32px;margin:0;font-weight:700">자격증 FAQ 챗봇</h1><p style="color:var(--muted);margin:4px 0 0">자격증 시험 접수 관련 질문에 답변합니다</p></header>
+<div id="chatContainer" style="background:white;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08);display:flex;flex-direction:column;height:600px;overflow:hidden">
+<div id="messages" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px"></div>
+<div id="inputArea" style="display:flex;gap:8px;padding:16px;border-top:1px solid var(--line)">
+<input type="text" id="messageInput" placeholder="질문을 입력하세요..." autocomplete="off" style="flex:1;padding:12px;border:2px solid var(--line);border-radius:8px;font-size:16px;font-family:inherit">
+<button id="sendBtn" type="button" style="padding:12px 24px;background:var(--blue);color:white;border:none;border-radius:8px;font-weight:800;cursor:pointer;min-width:80px">전송</button>
+</div>
+</div>
+<div style="margin-top:16px"><a href="/" style="color:var(--blue);text-decoration:none;font-weight:800">← 접수 페이지로 돌아가기</a></div>
+</div>
+
+<main id="mainPage">
 <header><div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div></header>
 <section class="hero"><h2>새로운 시작, 지금도 충분합니다</h2><p>배우고 도전하고 싶은 마음을 응원합니다. 아래에서 자격증을 고르고 이름과 연락처만 남겨 주세요.</p><div class="notice">천천히 작성하셔도 괜찮습니다. 저희가 끝까지 함께 도와드리겠습니다.</div></section>
 <section class="panel"><h2>자격증을 골라 주세요</h2><form id="applicationForm">
@@ -122,4 +134,86 @@ lookupButton.addEventListener('click', async () => {
     lookupResult.innerHTML = `<div class="status error">조회 중 오류가 발생했습니다: ${err.message}</div>`;
   }
 });
+
+// 클라이언트사이드 라우팅
+function initRouter() {
+  const faqPage = document.querySelector('#faqPage');
+  const mainPage = document.querySelector('#mainPage');
+
+  if (window.location.pathname === '/faq' || window.location.pathname.endsWith('/faq')) {
+    faqPage.style.display = 'block';
+    mainPage.style.display = 'none';
+    initFAQChat();
+  } else {
+    faqPage.style.display = 'none';
+    mainPage.style.display = 'block';
+  }
+}
+
+function initFAQChat() {
+  const API_URL = '/api/faq';
+  const messagesDiv = document.querySelector('#messages');
+  const messageInput = document.querySelector('#messageInput');
+  const sendBtn = document.querySelector('#sendBtn');
+
+  function addMessage(text, isUser = false, source = '') {
+    const div = document.createElement('div');
+    div.style.cssText = isUser ? 'background:var(--blue);color:white;align-self:flex-end;max-width:80%' : 'background:#f0f0f0;color:var(--ink);align-self:flex-start;max-width:80%';
+    div.style.cssText += ';padding:12px 16px;border-radius:8px';
+    div.textContent = text;
+    if (source) {
+      const sourceDiv = document.createElement('div');
+      sourceDiv.style.cssText = 'font-size:12px;color:var(--muted);margin-top:4px';
+      sourceDiv.textContent = source;
+      div.appendChild(sourceDiv);
+    }
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const message = messageInput.value.trim();
+    if (!message) return;
+
+    addMessage(message, true);
+    messageInput.value = '';
+    sendBtn.disabled = true;
+
+    const loadingDiv = document.createElement('div');
+    loadingDiv.style.cssText = 'padding:12px 16px;border-radius:8px;background:#f0f0f0;align-self:flex-start;max-width:80%';
+    loadingDiv.innerHTML = '<div style="display:inline-block;width:20px;height:20px;border:3px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .6s linear infinite"></div>';
+    messagesDiv.appendChild(loadingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+
+      messagesDiv.removeChild(loadingDiv);
+
+      if (!response.ok) throw new Error('API 오류');
+
+      const result = await response.json();
+      addMessage(result.answer, false, result.source);
+    } catch (error) {
+      messagesDiv.removeChild(loadingDiv);
+      addMessage(`오류: ${error.message}`, false);
+    } finally {
+      sendBtn.disabled = false;
+      messageInput.focus();
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  addMessage('안녕하세요! 자격증 시험 접수 관련 질문에 답변해드립니다. 무엇을 도와드릴까요?', false);
+}
+
+initRouter();
 </script>
