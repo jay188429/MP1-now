@@ -1,7 +1,29 @@
-// Node.js 18+ 내장 fetch 사용
+// Stage 4: 확장 데이터(4,705건) + 동의어 기능
 
 let FAQ = [];
+let SYNONYMS = {};
 let faqLoaded = false;
+
+const SYNONYMS_DICT = {
+  "포크레인": "굴착기",
+  "포클레인": "굴착기",
+  "요보사": "요양보호사",
+  "한조기": "한식조리기능사",
+  "개사": "공인중개사",
+  "공개사": "공인중개사",
+  "손평사": "손해평가사",
+  "지게차면허": "지게차운전기능사",
+  "전기기사": "전기기능사"
+};
+
+function expandSynonyms(text) {
+  let expanded = text;
+  for (const [short, full] of Object.entries(SYNONYMS_DICT)) {
+    const regex = new RegExp(short, 'gi');
+    expanded = expanded.replace(regex, full);
+  }
+  return expanded;
+}
 
 function tokenize(text) {
   const tokens = text.match(/[가-힣A-Za-z0-9]+/g) || [];
@@ -9,18 +31,23 @@ function tokenize(text) {
 }
 
 function retrieve(question, topK = 3, minScore = 2) {
-  const q = tokenize(question);
+  // 질문에서 동의어 전개
+  const expandedQuestion = expandSynonyms(question);
+  const q = tokenize(expandedQuestion);
   const ranked = [];
 
   for (const row of FAQ) {
-    const keywordHits = row.keywords.filter(
-      key => question.toLowerCase().includes(key.toLowerCase())
-    ).length * 2;
+    // 자격증명 매칭 (가중치 3)
+    const certMatch = row.cert && row.cert.toLowerCase().includes(expandedQuestion.toLowerCase()) ? 3 : 0;
 
-    const qTokens = tokenize(row.title + ' ' + row.text);
-    const overlap = Array.from(q).filter(token => qTokens.has(token)).length;
+    // 카테고리 매칭 (가중치 2)
+    const catMatch = row.category && row.category.toLowerCase().includes(expandedQuestion.toLowerCase()) ? 2 : 0;
 
-    const score = keywordHits + overlap;
+    // 텍스트 토큰 오버랩
+    const textBlob = `${row.title || ''} ${row.body || ''} ${row.reply || ''}`;
+    const overlap = Array.from(q).filter(token => textBlob.toLowerCase().includes(token)).length;
+
+    const score = certMatch + catMatch + overlap;
     ranked.push([score, row]);
   }
 
@@ -57,6 +84,7 @@ async function callGemini(prompt) {
 }
 
 function buildPrompt(question, document) {
+  const reply = document.reply || document.text || '';
   return `당신은 자격증 시험 접수 FAQ 상담원입니다.
 아래 근거 안에서만 답하세요. 근거에 없는 내용을 만들지 마세요.
 근거로 답할 수 없으면 정확히 UNKNOWN이라고 답하세요.
@@ -65,7 +93,7 @@ function buildPrompt(question, document) {
 ${question}
 
 [근거]
-${document.text}
+${reply}
 
 한국어 두 문장 이내로 답하세요.`;
 }
@@ -96,10 +124,13 @@ async function answerQuestion(question) {
       };
     }
 
+    const title = bestDoc.title || '?';
+    const cert = bestDoc.cert || '?';
+
     return {
       status: 'ANSWERED',
       answer: generated,
-      source: `${bestDoc.cert} - ${bestDoc.title}`,
+      source: `${cert} - ${title}`,
       score: bestScore
     };
   } catch (error) {
@@ -114,11 +145,16 @@ async function answerQuestion(question) {
 
 async function loadFAQ() {
   try {
-    const response = await fetch('https://mp1-now.vercel.app/faq.json');
+    const response = await fetch('https://mp1-now.vercel.app/faq_combined.jsonl');
     if (response.ok) {
-      FAQ = await response.json();
+      const text = await response.text();
+      FAQ = text
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line)
+        .map(line => JSON.parse(line));
       faqLoaded = true;
-      console.log(`✓ FAQ 로드 완료: ${FAQ.length}개 항목`);
+      console.log(`✓ FAQ 로드 완료: ${FAQ.length}개 항목 (Stage4 - 확장 데이터)`);
     } else {
       console.error(`FAQ 로드 실패: ${response.status}`);
     }
