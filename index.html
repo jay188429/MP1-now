@@ -32,8 +32,48 @@
 <header><div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div><div class="nav"><a href="/faq">챗봇 FAQ</a><a class="secondary" href="/admin.html">관리자</a></div></header>
 <section class="hero"><h2>새로운 시작, 지금도 충분합니다</h2><p>배우고 도전하고 싶은 마음을 응원합니다. 아래에서 자격증을 고르고 이름과 연락처만 남겨 주세요.</p><div class="notice">천천히 작성하셔도 괜찮습니다. 저희가 끝까지 함께 도와드리겠습니다.</div></section>
 <section class="panel"><h2>자격증을 골라 주세요</h2><form id="applicationForm">
-<div class="field full"><label>원하시는 자격증 <span aria-hidden="true">*</span></label><div class="certificate-list" role="radiogroup" aria-label="자격증 선택"><label class="certificate-toggle"><input type="radio" name="certificate" value="공인중개사(전문자격사)" required><span>공인중개사<br>(전문자격사)</span></label><label class="certificate-toggle"><input type="radio" name="certificate" value="사회복지사 2급(국가자격)"><span>사회복지사 2급<br>(국가자격)</span></label><label class="certificate-toggle"><input type="radio" name="certificate" value="전기기능사(큐넷 국가기술자격)"><span>전기기능사<br>(큐넷 국가기술자격)</span></label></div></div>
-<div class="grid simple-grid"><div class="field"><label for="name">이름 *</label><input id="name" name="name" autocomplete="name" required><div class="help" style="visibility: hidden;">숫자만 입력해도 하이픈을 넣어 드립니다.</div></div><div class="field"><label for="phone">연락처 *</label><input id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678" required><div class="help">숫자만 입력해도 하이픈을 넣어 드립니다.</div></div></div>
+<div class="field full"><label>원하시는 자격증 <span aria-hidden="true">*</span></label><div class="certificate-list" role="radiogroup" aria-label="자격증 선택">
+<label class="certificate-toggle"><input type="radio" name="certificate" value="한식조리기능사" required><span>한식조리기능사</span></label>
+<label class="certificate-toggle"><input type="radio" name="certificate" value="지게차운전기능사" required><span>지게차운전기능사</span></label>
+<label class="certificate-toggle"><input type="radio" name="certificate" value="굴착기운전기능사" required><span>굴착기운전기능사</span></label>
+<label class="certificate-toggle"><input type="radio" name="certificate" value="전기기능사" required><span>전기기능사</span></label>
+<label class="certificate-toggle"><input type="radio" name="certificate" value="공인중개사" required><span>공인중개사</span></label>
+<label class="certificate-toggle"><input type="radio" name="certificate" value="손해평가사" required><span>손해평가사</span></label>
+<label class="certificate-toggle"><input type="radio" name="certificate" value="요양보호사" required><span>요양보호사</span></label>
+<label class="certificate-toggle"><input type="radio" name="certificate" value="위생사" required><span>위생사</span></label>
+</div></div>
+<div class="grid simple-grid">
+<div class="field"><label for="name">이름 *</label><input id="name" name="name" autocomplete="name" placeholder="홍길동" required><div class="help" id="nameHelp">한글 완성글자 2글자 이상 입력하세요.</div></div>
+<div class="field"><label for="phone">연락처 *</label><input id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678" required><div class="help">숫자만 입력해도 하이픈을 넣어 드립니다.</div></div>
+</div>
+<div class="grid simple-grid">
+<div class="field"><label>성별 *</label>
+<div style="display:flex;gap:16px;align-items:center;height:50px;">
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:normal;"><input type="radio" name="gender" value="남" required style="width:20px;min-height:20px;"> 남성</label>
+<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:normal;"><input type="radio" name="gender" value="여" required style="width:20px;min-height:20px;"> 여성</label>
+</div></div>
+<div class="field"><label for="regionFilter">시험장 위치 (지역) *</label>
+<select id="regionFilter" name="region" required>
+<option value="">지역을 선택하세요</option>
+<option value="서울">서울</option>
+<option value="부산">부산</option>
+<option value="대구">대구</option>
+<option value="인천">인천</option>
+<option value="광주">광주</option>
+<option value="대전">대전</option>
+<option value="울산">울산</option>
+<option value="세종">세종</option>
+<option value="경기">경기</option>
+<option value="강원">강원</option>
+<option value="충북">충북</option>
+<option value="충남">충남</option>
+<option value="전북">전북</option>
+<option value="전남">전남</option>
+<option value="경북">경북</option>
+<option value="경남">경남</option>
+<option value="제주">제주</option>
+</select></div>
+</div>
 <button class="button" type="submit">접수하기</button><div id="result" role="status" aria-live="polite"></div></form></section>
 <section class="panel lookup-panel"><div><h2>내 접수 확인</h2><p>접수할 때 입력한 전화번호로 접수 상태를 확인할 수 있습니다.</p></div><div class="lookup-row"><label for="lookupPhone">연락처<input id="lookupPhone" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678"></label><button class="button secondary" id="lookupButton" type="button">확인하기</button></div><div id="lookupResult" class="lookup-result" role="status" aria-live="polite"></div></section>
 <footer>작은 시작도 소중합니다. 접수 내용을 확인한 뒤 안내해 드리겠습니다.</footer>
@@ -48,6 +88,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const form = document.querySelector("#applicationForm");
+const nameInput = document.querySelector("#name");
 const phone = document.querySelector("#phone");
 const result = document.querySelector("#result");
 const lookupPhone = document.querySelector("#lookupPhone");
@@ -63,6 +104,10 @@ function formatPhone(value) {
   return `${cleaned.slice(0, 3)}-${cleaned.slice(3, 7)}-${cleaned.slice(7, 11)}`;
 }
 
+nameInput.addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/[^가-힣a-zA-Z]/g, '');
+});
+
 phone.addEventListener('input', (e) => {
   e.target.value = formatPhone(e.target.value);
 });
@@ -74,10 +119,32 @@ lookupPhone.addEventListener('input', (e) => {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  const nameVal = nameInput.value.trim();
+  const koreanNameRegex = /^[가-힣]{2,}$/;
+  const englishNameRegex = /^[a-zA-Z]{2,}$/;
+
+  if (!koreanNameRegex.test(nameVal) && !englishNameRegex.test(nameVal)) {
+    result.innerHTML = '<div class="status error">이름은 초성(자모음) 없이 한글/영문 2글자 이상으로 올바르게 입력해주세요.</div>';
+    nameInput.focus();
+    return;
+  }
+
   const phoneClean = document.querySelector('#phone').value.replace(/\D/g, '');
+  if (phoneClean.length < 10) {
+    result.innerHTML = '<div class="status error">올바른 연락처(10~11자리)를 입력해주세요.</div>';
+    document.querySelector('#phone').focus();
+    return;
+  }
+
+  const certRadio = document.querySelector('input[name="certificate"]:checked');
+  const genderRadio = document.querySelector('input[name="gender"]:checked');
+  const regionSelect = document.querySelector('#regionFilter');
+
   const formData = {
-    certificate: document.querySelector('input[name="certificate"]:checked').value,
-    name: document.querySelector('#name').value,
+    certificate: certRadio ? certRadio.value : '',
+    name: nameVal,
+    gender: genderRadio ? genderRadio.value : '',
+    region: regionSelect ? regionSelect.value : '',
     phone: phoneClean,
     received_at: new Date().toISOString()
   };
