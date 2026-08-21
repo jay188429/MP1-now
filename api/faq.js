@@ -116,49 +116,6 @@ function retrieve(question, topK = 3, minScore = 0.01) {
   return scores.slice(0, topK).filter(item => item[0] >= minScore);
 }
 
-async function callGemini(prompt) {
-  const apiKey = process.env.GOOGLE_API_KEY;
-  if (!apiKey) throw new Error('GOOGLE_API_KEY not set');
-
-  const model = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-goog-api-key': apiKey
-    },
-    body: JSON.stringify({
-      contents: [{
-        parts: [{ text: prompt }]
-      }]
-    })
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Gemini API error: ${response.status} - ${text}`);
-  }
-
-  const data = await response.json();
-  return data.candidates[0].content.parts[0].text.trim();
-}
-
-function buildPrompt(question, document) {
-  const reply = document.reply || document.text || '';
-  return `당신은 자격증 시험 접수 FAQ 상담원입니다.
-아래 근거 안에서만 답하세요. 근거에 없는 내용을 만들지 마세요.
-근거로 답할 수 없으면 정확히 UNKNOWN이라고 답하세요.
-
-[질문]
-${question}
-
-[근거]
-${reply}
-
-한국어 두 문장 이내로 답하세요.`;
-}
-
 async function answerQuestion(question) {
   const results = retrieve(question);
 
@@ -172,36 +129,17 @@ async function answerQuestion(question) {
   }
 
   const [bestScore, bestDoc] = results[0];
+  const title = bestDoc.title || '?';
+  const cert = bestDoc.cert || '?';
+  const fallbackReply = bestDoc.reply || bestDoc.text || '내용을 확인할 수 없습니다.';
 
-  try {
-    const generated = await callGemini(buildPrompt(question, bestDoc));
-
-    if (!generated || generated.toUpperCase() === 'UNKNOWN') {
-      return {
-        status: 'UNKNOWN',
-        answer: '제공된 FAQ에서 확인할 수 없는 내용입니다.',
-        source: '없음',
-        score: bestScore
-      };
-    }
-
-    const title = bestDoc.title || '?';
-    const cert = bestDoc.cert || '?';
-
-    return {
-      status: 'ANSWERED',
-      answer: generated,
-      source: `${cert} - ${title}`,
-      score: bestScore
-    };
-  } catch (error) {
-    return {
-      status: 'ERROR',
-      answer: `오류: ${error.message}`,
-      source: '없음',
-      score: bestScore
-    };
-  }
+  // Gemini API 호출 완전 제거 (429 에러 원천 차단)
+  return {
+    status: 'FALLBACK_ANSWERED',
+    answer: `${fallbackReply}`,
+    source: `${cert} - ${title} (유사도: ${(bestScore).toFixed(2)})`,
+    score: bestScore
+  };
 }
 
 async function loadFAQ() {

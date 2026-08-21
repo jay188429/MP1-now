@@ -28,7 +28,17 @@
 </div>
 
 <main id="mainPage">
-<header><div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div></header>
+<header>
+  
+  <div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div>
+</header>
+
+<!-- 우측 상단 항상 표시되는 플로팅 챗봇 활성화 버튼 -->
+<div style="position: fixed; top: 20px; right: 20px; z-index: 1000;">
+  <button class="button" id="floatingChatBtn" type="button" style="border-radius: 999px; padding: 12px 22px; font-weight: 700; box-shadow: 0 6px 20px rgba(0, 113, 227, 0.25); display: flex; align-items: center; gap: 8px;">
+    💬 자격증 FAQ 챗봇
+  </button>
+</div>
 <section class="hero"><h2>새로운 시작, 지금도 충분합니다</h2><p>배우고 도전하고 싶은 마음을 응원합니다. 아래에서 자격증을 고르고 이름과 연락처만 남겨 주세요.</p><div class="notice">천천히 작성하셔도 괜찮습니다. 저희가 끝까지 함께 도와드리겠습니다.</div></section>
 <section class="panel"><h2>자격증을 골라 주세요</h2><form id="applicationForm">
 <div class="field full"><label>원하시는 자격증 <span aria-hidden="true">*</span></label><div class="certificate-list" role="radiogroup" aria-label="자격증 선택"><label class="certificate-toggle"><input type="radio" name="certificate" value="공인중개사(전문자격사)" required><span>공인중개사<br>(전문자격사)</span></label><label class="certificate-toggle"><input type="radio" name="certificate" value="사회복지사 2급(국가자격)"><span>사회복지사 2급<br>(국가자격)</span></label><label class="certificate-toggle"><input type="radio" name="certificate" value="전기기능사(큐넷 국가기술자격)"><span>전기기능사<br>(큐넷 국가기술자격)</span></label></div></div>
@@ -139,14 +149,29 @@ lookupButton.addEventListener('click', async () => {
 function initRouter() {
   const faqPage = document.querySelector('#faqPage');
   const mainPage = document.querySelector('#mainPage');
+  const floatingChatBtn = document.querySelector('#floatingChatBtn');
+
+  if (floatingChatBtn) {
+    floatingChatBtn.addEventListener('click', () => {
+      history.pushState({}, '', '/faq');
+      initRouter();
+    });
+  }
+
+  // 뒤로가기/앞으로가기 지원
+  window.addEventListener('popstate', () => {
+    initRouter();
+  });
 
   if (window.location.pathname === '/faq' || window.location.pathname.endsWith('/faq')) {
     faqPage.style.display = 'block';
     mainPage.style.display = 'none';
+    if (floatingChatBtn) floatingChatBtn.style.display = 'none';
     initFAQChat();
   } else {
     faqPage.style.display = 'none';
     mainPage.style.display = 'block';
+    if (floatingChatBtn) floatingChatBtn.style.display = 'flex';
   }
 }
 
