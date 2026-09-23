@@ -35,6 +35,7 @@
 :root{--ink:#24343b;--muted:#5f7077;--paper:#faf8f3;--blue:#315b72;--blue-dark:#24485d;--yellow:#f4e7bf;--line:#d7d8d2;--soft:#e7f0ef;--danger:#a94442}
 body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0 100%)}
 .lookup-result-card{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fffdf8}.lookup-result-card h3{margin:0 0 14px;font-size:22px}.lookup-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}.lookup-detail-grid div{padding:12px;border-radius:10px;background:#f3f6f3}.lookup-detail-grid span{display:block;color:var(--muted);font-size:13px}.lookup-detail-grid strong{display:block;margin-top:3px;font-size:17px}.ticket-ready{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-radius:12px;background:#e5f1e9;color:#285b46;font-weight:700}.ticket-ready .button{white-space:nowrap}.lookup-help{margin:12px 0 0;color:var(--muted);font-size:15px}@media(max-width:620px){.lookup-detail-grid{grid-template-columns:1fr}.ticket-ready{align-items:stretch;flex-direction:column}.ticket-ready .button{width:100%}}
+.access-panel{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 22px;border:1px solid var(--line);border-radius:16px;background:rgba(255,253,248,.9);box-shadow:0 8px 24px #24343b12}.access-copy strong{display:block;font-size:19px}.access-copy span{display:block;margin-top:2px;color:var(--muted);font-size:14px}.access-actions{display:flex;gap:8px;flex-wrap:wrap}.access-actions .button{min-height:44px;font-size:15px}.dialog-backdrop{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:#24343b66;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}.dialog-backdrop.is-open{opacity:1;visibility:visible}.dialog-card{width:min(100%,480px);max-height:calc(100vh - 36px);overflow:auto;padding:28px;border-radius:20px;background:#fffdf8;box-shadow:0 24px 70px #24343b40}.dialog-card h2{margin-bottom:8px}.dialog-description{margin:0 0 22px;color:var(--muted)}.dialog-form{display:grid;gap:14px}.dialog-form .field{gap:6px}.dialog-form label{font-size:15px}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}.consent-box{display:flex;align-items:flex-start;gap:10px;padding:14px;border-radius:12px;background:var(--soft);font-size:15px}.consent-box input{width:22px;min-height:22px;accent-color:var(--blue)}.dialog-close{float:right;border:0;background:transparent;color:var(--muted);font-size:26px;line-height:1;cursor:pointer}.account-status{margin-top:8px;color:var(--blue);font-size:14px}@media(max-width:720px){.access-panel{align-items:stretch;flex-direction:column}.access-actions{display:grid;grid-template-columns:1fr}.access-actions .button{width:100%}.dialog-card{padding:22px}}
 </style>
 </head>
 <body>
@@ -52,6 +53,7 @@ body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0
 
 <main id="mainPage">
 <header><div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div><div class="nav"><a class="secondary" href="/admin.html">관리자</a></div></header>
+<section class="access-panel"><div class="access-copy"><strong id="accountGreeting">접수 방법을 선택해 주세요</strong><span id="accountStatus">로그인하면 접수내용을 더 편하게 확인할 수 있습니다.</span></div><div class="access-actions"><button class="button secondary" id="loginOpen" type="button">로그인</button><button class="button secondary" id="signupOpen" type="button">회원가입</button><button class="button" id="guestOpen" type="button">비회원으로 접수하기</button></div></section>
 <section class="hero"><h2>어렵지 않아요. 한 단계씩 안내해 드릴게요.</h2><p>원하시는 자격증을 고르고, 안내에 따라 기본정보를 입력하면 접수가 끝납니다. 작성 중에는 언제든 임시저장할 수 있습니다.</p><div class="notice">처음부터 끝까지 약 3분 정도 걸립니다. 잘 모르시는 내용은 왼쪽 아래 자격증 도우미에게 물어보세요.</div></section>
 <section class="panel application-panel"><div class="stepper" aria-label="접수 진행 단계"><div class="step-indicator is-active" data-step-indicator="1"><span>1</span><strong>자격증 선택</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="2"><span>2</span><strong>기본정보 입력</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="3"><span>3</span><strong>내용 확인</strong></div></div><div class="step-progress"><div id="stepProgressBar"></div></div><form id="applicationForm">
 <section class="form-step is-active" data-step="1"><h2>준비하실 자격증을 골라 주세요</h2><p class="section-lead">아래 버튼 중 하나를 눌러 선택해 주세요. 선택한 내용은 다음 단계로 이동해도 그대로 보관됩니다.</p>
@@ -83,6 +85,9 @@ body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0
 <button class="floating-chat-toggle" id="floatingChatToggle" type="button" aria-label="자격증 챗봇 열기" aria-expanded="false" aria-controls="floatingChatPanel"><span class="floating-chat-icon" aria-hidden="true">✦</span></button>
 </aside>
 <div class="modal-backdrop" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="modal"><h2 id="successTitle">접수가 완료되었습니다</h2><p id="successMessage">접수 내용을 확인한 뒤 안내해 드리겠습니다.</p><button class="button" id="closeModal" type="button">확인</button></div></div>
+<div class="dialog-backdrop" id="consentDialog" role="dialog" aria-modal="true" aria-labelledby="consentTitle"><div class="dialog-card"><button class="dialog-close" data-dialog-close="consentDialog" type="button" aria-label="닫기">×</button><h2 id="consentTitle">비회원 접수를 시작할게요</h2><p class="dialog-description">접수 안내와 접수내용 확인을 위해 아래 정보를 사용합니다. 동의하시면 접수 화면에 자동으로 입력해 드립니다.</p><form class="dialog-form" id="consentForm"><div class="field"><label for="consentName">이름 *</label><input id="consentName" required placeholder="홍길동"></div><div class="field"><label for="consentPhone">연락처 *</label><input id="consentPhone" required inputmode="tel" placeholder="010-1234-5678"></div><label class="consent-box"><input id="guestConsent" type="checkbox" required><span>개인정보 수집·이용 및 접수 안내 제공에 동의합니다.</span></label><div class="dialog-actions"><button class="button secondary" data-dialog-close="consentDialog" type="button">취소</button><button class="button" type="submit">동의하고 접수 시작</button></div></form></div></div>
+<div class="dialog-backdrop" id="loginDialog" role="dialog" aria-modal="true" aria-labelledby="loginTitle"><div class="dialog-card"><button class="dialog-close" data-dialog-close="loginDialog" type="button" aria-label="닫기">×</button><h2 id="loginTitle">로그인</h2><p class="dialog-description">로그인하면 접수내용을 다시 확인하기 편합니다.</p><form class="dialog-form" id="loginForm"><div class="field"><label for="loginEmail">이메일</label><input id="loginEmail" type="email" required autocomplete="email" placeholder="이메일을 입력하세요"></div><div class="field"><label for="loginPassword">비밀번호</label><input id="loginPassword" type="password" required autocomplete="current-password" placeholder="비밀번호를 입력하세요"></div><div class="dialog-actions"><button class="button secondary" data-dialog-close="loginDialog" type="button">취소</button><button class="button" type="submit">로그인</button></div><p class="account-status" id="loginStatus" role="status"></p></form></div></div>
+<div class="dialog-backdrop" id="signupDialog" role="dialog" aria-modal="true" aria-labelledby="signupTitle"><div class="dialog-card"><button class="dialog-close" data-dialog-close="signupDialog" type="button" aria-label="닫기">×</button><h2 id="signupTitle">회원가입</h2><p class="dialog-description">가입하면 다음 접수부터 정보를 편하게 불러올 수 있습니다.</p><form class="dialog-form" id="signupForm"><div class="field"><label for="signupName">이름 *</label><input id="signupName" required placeholder="홍길동"></div><div class="field"><label for="signupPhone">연락처 *</label><input id="signupPhone" required inputmode="tel" placeholder="010-1234-5678"></div><div class="field"><label for="signupEmail">이메일 *</label><input id="signupEmail" type="email" required autocomplete="email" placeholder="이메일을 입력하세요"></div><div class="field"><label for="signupPassword">비밀번호 *</label><input id="signupPassword" type="password" required minlength="6" autocomplete="new-password" placeholder="6자 이상 입력하세요"></div><label class="consent-box"><input id="signupConsent" type="checkbox" required><span>개인정보 수집·이용 및 회원 서비스 제공에 동의합니다.</span></label><div class="dialog-actions"><button class="button secondary" data-dialog-close="signupDialog" type="button">취소</button><button class="button" type="submit">회원가입</button></div><p class="account-status" id="signupStatus" role="status"></p></form></div></div>
 
 <!-- Supabase CDN 및 스크립트 통폐합 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -100,6 +105,80 @@ const lookupButton = document.querySelector("#lookupButton");
 const lookupResult = document.querySelector("#lookupResult");
 const successModal = document.querySelector("#successModal");
 const closeModal = document.querySelector("#closeModal");
+let currentUser = null;
+const dialog = (id) => document.querySelector(`#${id}`);
+
+function openDialog(id) { dialog(id).classList.add('is-open'); dialog(id).querySelector('input')?.focus(); }
+function closeDialog(id) { dialog(id).classList.remove('is-open'); }
+document.querySelectorAll('[data-dialog-close]').forEach((button) => button.addEventListener('click', () => closeDialog(button.dataset.dialogClose)));
+document.querySelector('#loginOpen').addEventListener('click', async () => {
+  if (currentUser) {
+    await supabaseClient.auth.signOut();
+    setAccountView(null);
+  } else openDialog('loginDialog');
+});
+document.querySelector('#signupOpen').addEventListener('click', () => openDialog('signupDialog'));
+document.querySelector('#guestOpen').addEventListener('click', () => openDialog('consentDialog'));
+
+function setAccountView(user) {
+  currentUser = user;
+  const greeting = document.querySelector('#accountGreeting');
+  const status = document.querySelector('#accountStatus');
+  const loginButton = document.querySelector('#loginOpen');
+  const signupButton = document.querySelector('#signupOpen');
+  if (user) {
+    const name = user.user_metadata?.name || user.email || '회원';
+    greeting.textContent = `${name}님, 접수를 시작해 주세요`;
+    status.textContent = '로그인 상태입니다. 입력한 접수내용을 다시 확인하기 편합니다.';
+    loginButton.textContent = '로그아웃';
+    signupButton.hidden = true;
+    if (user.user_metadata?.name) nameInput.value = user.user_metadata.name;
+    if (user.user_metadata?.phone) phone.value = formatPhone(user.user_metadata.phone);
+  } else {
+    greeting.textContent = '접수 방법을 선택해 주세요';
+    status.textContent = '로그인하면 접수내용을 더 편하게 확인할 수 있습니다.';
+    loginButton.textContent = '로그인';
+    signupButton.hidden = false;
+  }
+}
+
+document.querySelector('#consentForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  nameInput.value = document.querySelector('#consentName').value.trim();
+  phone.value = formatPhone(document.querySelector('#consentPhone').value);
+  closeDialog('consentDialog');
+  draftStatus.textContent = '비회원 접수가 시작되었습니다. 자격증을 선택해 주세요.';
+  document.querySelector('.application-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  nameInput.focus();
+});
+
+document.querySelector('#loginForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const status = document.querySelector('#loginStatus');
+  status.textContent = '로그인 중입니다...';
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email: document.querySelector('#loginEmail').value.trim(), password: document.querySelector('#loginPassword').value });
+  if (error) { status.textContent = '이메일 또는 비밀번호를 확인해 주세요.'; return; }
+  setAccountView(data.user);
+  closeDialog('loginDialog');
+});
+
+document.querySelector('#signupForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const status = document.querySelector('#signupStatus');
+  status.textContent = '회원가입 중입니다...';
+  const name = document.querySelector('#signupName').value.trim();
+  const signupPhone = formatPhone(document.querySelector('#signupPhone').value);
+  const email = document.querySelector('#signupEmail').value.trim();
+  const { data, error } = await supabaseClient.auth.signUp({ email, password: document.querySelector('#signupPassword').value, options: { data: { name, phone: signupPhone } } });
+  if (error) { status.textContent = error.message.includes('already') ? '이미 가입된 이메일입니다.' : '회원가입에 실패했습니다. 입력 내용을 확인해 주세요.'; return; }
+  nameInput.value = name;
+  phone.value = signupPhone;
+  if (data.user && data.session) setAccountView(data.user);
+  status.textContent = data.session ? '회원가입이 완료되었습니다.' : '가입 확인 이메일을 확인한 뒤 로그인해 주세요.';
+  if (data.session) closeDialog('signupDialog');
+});
+
+supabaseClient.auth.getSession().then(({ data }) => setAccountView(data.session?.user || null));
 
 function formatPhone(value) {
   const cleaned = value.replace(/\D/g, '');
