@@ -232,16 +232,12 @@ function initRouter() {
   const faqPage = document.querySelector('#faqPage');
   const mainPage = document.querySelector('#mainPage');
 
-  if (window.location.pathname === '/faq' || window.location.pathname.endsWith('/faq')) {
-    faqPage.style.display = 'block';
-    mainPage.style.display = 'none';
-    document.querySelector('#floatingChat').style.display = 'none';
-    initFAQChat();
-  } else {
-    faqPage.style.display = 'none';
-    mainPage.style.display = 'block';
-    initFloatingChat();
-  }
+  // 챗봇은 별도 페이지로 이동하지 않고 접수 페이지 위에서만 동작한다.
+  // 예전에 저장된 /faq 주소로 들어와도 접수 화면을 그대로 보여준다.
+  faqPage.style.display = 'none';
+  mainPage.style.display = 'block';
+  document.querySelector('#floatingChat').style.display = 'block';
+  initFloatingChat();
 }
 
 function initFAQChat() {
