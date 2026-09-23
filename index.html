@@ -14,6 +14,7 @@
 <style>h1,h2,p,.notice{word-break:keep-all}.certificate-list{grid-template-columns:repeat(3,minmax(0,1fr))}.certificate-toggle{position:relative;display:block!important;min-height:0!important;padding:0!important;border:0!important;background:transparent!important}.certificate-toggle input{position:absolute;width:1px;height:1px;opacity:0}.certificate-toggle span{display:flex;align-items:center;justify-content:center;min-height:78px;padding:16px;border:1px solid #d2d2d7;border-radius:15px;background:#fff;color:var(--ink);text-align:center;font-size:17px;font-weight:650;box-shadow:0 2px 8px #1d1d1f08;transition:border-color .2s ease,background .2s ease,box-shadow .2s ease,transform .2s ease}.certificate-toggle:hover span{border-color:#a7a7ad;transform:translateY(-1px)}.certificate-toggle input:focus-visible+span{box-shadow:0 0 0 4px #0071e326}.certificate-toggle input:checked+span{border-color:var(--blue);background:var(--soft);box-shadow:0 0 0 3px #0071e31a;color:var(--blue)}.simple-grid{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:720px){.certificate-list,.simple-grid{grid-template-columns:1fr}.certificate-toggle span{min-height:66px}}</style>
 <style>.lookup-panel{display:grid;gap:14px}.lookup-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end}.lookup-result{color:var(--muted);white-space:pre-line}.modal-backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:#1d1d1f66;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}.modal-backdrop.is-open{opacity:1;visibility:visible}.modal{width:min(100%,440px);padding:30px;border:1px solid #d2d2d7;border-radius:20px;background:#fff;box-shadow:0 24px 70px #1d1d1f33}.modal h2{margin-bottom:10px}.modal p{color:var(--muted)}.modal .button{width:100%}@media(max-width:620px){.lookup-row{grid-template-columns:1fr}.lookup-row .button{width:100%}}</style>
 <style>
+.application-panel{padding:28px}.stepper{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px}.step-indicator{display:flex;align-items:center;gap:8px;color:#8a8f98;font-size:15px;white-space:nowrap}.step-indicator span{display:grid;place-items:center;width:34px;height:34px;border:2px solid #c7c7cc;border-radius:50%;font-weight:800}.step-indicator.is-active,.step-indicator.is-complete{color:var(--blue)}.step-indicator.is-active span,.step-indicator.is-complete span{border-color:var(--blue);background:var(--blue);color:#fff}.step-line{width:60px;height:2px;background:#d2d2d7}.step-progress{height:5px;margin:0 auto 28px;border-radius:99px;background:#e9eaee;overflow:hidden}.step-progress div{height:100%;width:33.333%;border-radius:inherit;background:var(--blue);transition:width .2s ease}.section-lead{margin:0 0 24px;color:var(--muted);font-size:18px}.form-step[hidden]{display:none}.choice-row{display:flex;align-items:center;gap:22px;min-height:52px}.choice-row label{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:500;cursor:pointer}.choice-row input,.consent-row input{width:24px;min-height:24px;accent-color:var(--blue)}.review-card{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid #d2d2d7;border-radius:14px;overflow:hidden;margin-bottom:22px}.review-card div{display:grid;gap:4px;padding:17px 18px;border-bottom:1px solid #e4e4e7}.review-card div:nth-child(odd){border-right:1px solid #e4e4e7}.review-card div:nth-last-child(-n+2){border-bottom:0}.review-card span{color:var(--muted);font-size:14px}.review-card strong{font-size:18px}.consent-row{display:flex;align-items:flex-start;gap:10px;padding:15px;border-radius:12px;background:#f4f8ff;color:var(--ink);font-size:16px;cursor:pointer}.wizard-actions{display:flex;justify-content:space-between;gap:12px;margin-top:28px;padding-top:20px;border-top:1px solid #e4e4e7}.wizard-actions-right{display:flex;gap:10px}.wizard-actions .button{min-width:130px}.draft-status{min-height:24px;margin-top:10px;color:var(--muted);font-size:14px;text-align:right}@media(max-width:620px){.application-panel{padding:20px}.stepper{justify-content:space-between;gap:4px}.step-indicator{flex-direction:column;gap:4px;font-size:12px}.step-line{flex:1;width:auto;margin-bottom:18px}.review-card{grid-template-columns:1fr}.review-card div:nth-child(odd){border-right:0}.review-card div:nth-last-child(2){border-bottom:1px solid #e4e4e7}.wizard-actions{align-items:stretch;flex-direction:column}.wizard-actions-right{display:grid;grid-template-columns:1fr 1fr}.wizard-actions .button{width:100%;min-width:0}.wizard-actions-right .button:last-child{grid-column:1/-1}.section-lead{font-size:17px}}
 .floating-chat{position:fixed;left:24px;bottom:24px;z-index:30;font-size:16px}
 .floating-chat-toggle{display:grid;place-items:center;width:58px;height:58px;border:0;border-radius:16px;padding:0;background:var(--blue);color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 10px 28px #0071e34d;transition:transform .2s ease,box-shadow .2s ease}
 .floating-chat-toggle:hover{transform:translateY(-2px);box-shadow:0 14px 32px #0071e359}
@@ -46,8 +47,9 @@
 
 <main id="mainPage">
 <header><div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div><div class="nav"><a class="secondary" href="/admin.html">관리자</a></div></header>
-<section class="hero"><h2>새로운 시작, 지금도 충분합니다</h2><p>배우고 도전하고 싶은 마음을 응원합니다. 아래에서 자격증을 고르고 이름과 연락처만 남겨 주세요.</p><div class="notice">천천히 작성하셔도 괜찮습니다. 저희가 끝까지 함께 도와드리겠습니다.</div></section>
-<section class="panel"><h2>자격증을 골라 주세요</h2><form id="applicationForm">
+<section class="hero"><h2>어렵지 않아요. 한 단계씩 안내해 드릴게요.</h2><p>원하시는 자격증을 고르고, 안내에 따라 기본정보를 입력하면 접수가 끝납니다. 작성 중에는 언제든 임시저장할 수 있습니다.</p><div class="notice">처음부터 끝까지 약 3분 정도 걸립니다. 잘 모르시는 내용은 왼쪽 아래 자격증 도우미에게 물어보세요.</div></section>
+<section class="panel application-panel"><div class="stepper" aria-label="접수 진행 단계"><div class="step-indicator is-active" data-step-indicator="1"><span>1</span><strong>자격증 선택</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="2"><span>2</span><strong>기본정보 입력</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="3"><span>3</span><strong>내용 확인</strong></div></div><div class="step-progress"><div id="stepProgressBar"></div></div><form id="applicationForm">
+<section class="form-step is-active" data-step="1"><h2>준비하실 자격증을 골라 주세요</h2><p class="section-lead">아래 버튼 중 하나를 눌러 선택해 주세요. 선택한 내용은 다음 단계로 이동해도 그대로 보관됩니다.</p>
 <div class="field full"><label>원하시는 자격증 <span aria-hidden="true">*</span></label><div class="certificate-list" role="radiogroup" aria-label="자격증 선택">
 <label class="certificate-toggle"><input type="radio" name="certificate" value="한식조리기능사" required><span>한식조리기능사</span></label>
 <label class="certificate-toggle"><input type="radio" name="certificate" value="지게차운전기능사" required><span>지게차운전기능사</span></label>
@@ -57,40 +59,13 @@
 <label class="certificate-toggle"><input type="radio" name="certificate" value="손해평가사" required><span>손해평가사</span></label>
 <label class="certificate-toggle"><input type="radio" name="certificate" value="요양보호사" required><span>요양보호사</span></label>
 <label class="certificate-toggle"><input type="radio" name="certificate" value="위생사" required><span>위생사</span></label>
-</div></div>
-<div class="grid simple-grid">
-<div class="field"><label for="name">이름 *</label><input id="name" name="name" autocomplete="name" placeholder="홍길동" required><div class="help" id="nameHelp">한글 완성글자 2글자 이상 입력하세요.</div></div>
-<div class="field"><label for="phone">연락처 *</label><input id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678" required><div class="help">숫자만 입력해도 하이픈을 넣어 드립니다.</div></div>
-</div>
-<div class="grid simple-grid">
-<div class="field"><label>성별 *</label>
-<div style="display:flex;gap:16px;align-items:center;height:50px;">
-<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:normal;"><input type="radio" name="gender" value="남" required style="width:20px;min-height:20px;"> 남성</label>
-<label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:normal;"><input type="radio" name="gender" value="여" required style="width:20px;min-height:20px;"> 여성</label>
-</div></div>
-<div class="field"><label for="regionFilter">시험장 위치 (지역) *</label>
-<select id="regionFilter" name="region" required>
-<option value="">지역을 선택하세요</option>
-<option value="서울">서울</option>
-<option value="부산">부산</option>
-<option value="대구">대구</option>
-<option value="인천">인천</option>
-<option value="광주">광주</option>
-<option value="대전">대전</option>
-<option value="울산">울산</option>
-<option value="세종">세종</option>
-<option value="경기">경기</option>
-<option value="강원">강원</option>
-<option value="충북">충북</option>
-<option value="충남">충남</option>
-<option value="전북">전북</option>
-<option value="전남">전남</option>
-<option value="경북">경북</option>
-<option value="경남">경남</option>
-<option value="제주">제주</option>
-</select></div>
-</div>
-<button class="button" type="submit">접수하기</button><div id="result" role="status" aria-live="polite"></div></form></section>
+</div></div></section>
+<section class="form-step" data-step="2" hidden><h2>신청자 정보를 입력해 주세요</h2><p class="section-lead">안내를 받으실 분의 정보를 정확하게 입력해 주세요. 숫자만 입력해도 전화번호는 자동으로 정리됩니다.</p><div class="grid simple-grid">
+<div class="field"><label for="name">이름 *</label><input id="name" name="name" autocomplete="name" placeholder="홍길동" required><div class="help" id="nameHelp">한글 이름은 두 글자 이상 입력해 주세요.</div></div>
+<div class="field"><label for="phone">연락처 *</label><input id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678" required><div class="help">숫자만 입력해도 전화번호를 자동으로 정리합니다.</div></div>
+</div><div class="grid simple-grid"><div class="field"><label>성별 *</label><div class="choice-row"><label><input type="radio" name="gender" value="남" required> 남성</label><label><input type="radio" name="gender" value="여" required> 여성</label></div></div><div class="field"><label for="regionFilter">시험장 위치 (지역) *</label><select id="regionFilter" name="region" required><option value="">지역을 선택하세요</option><option value="서울">서울</option><option value="부산">부산</option><option value="대구">대구</option><option value="인천">인천</option><option value="광주">광주</option><option value="대전">대전</option><option value="울산">울산</option><option value="세종">세종</option><option value="경기">경기</option><option value="강원">강원</option><option value="충북">충북</option><option value="충남">충남</option><option value="전북">전북</option><option value="전남">전남</option><option value="경북">경북</option><option value="경남">경남</option><option value="제주">제주</option></select></div></div></section>
+<section class="form-step" data-step="3" hidden><h2>입력한 내용을 확인해 주세요</h2><p class="section-lead">아래 내용이 맞는지 확인한 뒤 접수를 완료해 주세요.</p><div class="review-card"><div><span>신청 자격증</span><strong id="reviewCertificate">아직 선택하지 않았습니다</strong></div><div><span>이름</span><strong id="reviewName">아직 입력하지 않았습니다</strong></div><div><span>연락처</span><strong id="reviewPhone">아직 입력하지 않았습니다</strong></div><div><span>성별</span><strong id="reviewGender">아직 선택하지 않았습니다</strong></div><div><span>희망 지역</span><strong id="reviewRegion">아직 선택하지 않았습니다</strong></div></div><label class="consent-row"><input type="checkbox" id="privacyConsent" required><span>입력한 내용을 확인했으며, 접수 안내를 위해 개인정보를 사용하는 것에 동의합니다.</span></label></section>
+<div class="wizard-actions"><button class="button secondary" id="previousStep" type="button" hidden>이전 단계</button><div class="wizard-actions-right"><button class="button secondary" id="saveDraft" type="button">임시저장</button><button class="button" id="nextStep" type="button">다음 단계</button><button class="button" id="submitApplication" type="submit" hidden>접수 완료하기</button></div></div><div id="draftStatus" class="draft-status" role="status" aria-live="polite"></div><div id="result" role="status" aria-live="polite"></div></form></section>
 <section class="panel lookup-panel"><div><h2>내 접수 확인</h2><p>접수할 때 입력한 전화번호로 접수 상태를 확인할 수 있습니다.</p></div><div class="lookup-row"><label for="lookupPhone">연락처<input id="lookupPhone" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678"></label><button class="button secondary" id="lookupButton" type="button">확인하기</button></div><div id="lookupResult" class="lookup-result" role="status" aria-live="polite"></div></section>
 <footer>작은 시작도 소중합니다. 접수 내용을 확인한 뒤 안내해 드리겠습니다.</footer>
 </main>
@@ -140,8 +115,123 @@ lookupPhone.addEventListener('input', (e) => {
   e.target.value = formatPhone(e.target.value);
 });
 
+const DRAFT_KEY = 'now-certificate-application-draft';
+const steps = [...document.querySelectorAll('.form-step')];
+const indicators = [...document.querySelectorAll('[data-step-indicator]')];
+const stepProgressBar = document.querySelector('#stepProgressBar');
+const previousStep = document.querySelector('#previousStep');
+const nextStep = document.querySelector('#nextStep');
+const submitApplication = document.querySelector('#submitApplication');
+const saveDraftButton = document.querySelector('#saveDraft');
+const draftStatus = document.querySelector('#draftStatus');
+const privacyConsent = document.querySelector('#privacyConsent');
+let currentStep = 1;
+
+function selectedValue(name) {
+  return document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+}
+
+function updateReview() {
+  document.querySelector('#reviewCertificate').textContent = selectedValue('certificate') || '아직 선택하지 않았습니다';
+  document.querySelector('#reviewName').textContent = nameInput.value.trim() || '아직 입력하지 않았습니다';
+  document.querySelector('#reviewPhone').textContent = phone.value.trim() || '아직 입력하지 않았습니다';
+  document.querySelector('#reviewGender').textContent = selectedValue('gender') || '아직 선택하지 않았습니다';
+  document.querySelector('#reviewRegion').textContent = document.querySelector('#regionFilter').value || '아직 선택하지 않았습니다';
+}
+
+function showStep(step) {
+  currentStep = step;
+  steps.forEach((section) => {
+    const isCurrent = Number(section.dataset.step) === step;
+    section.hidden = !isCurrent;
+    section.classList.toggle('is-active', isCurrent);
+  });
+  indicators.forEach((indicator) => {
+    const number = Number(indicator.dataset.stepIndicator);
+    indicator.classList.toggle('is-active', number === step);
+    indicator.classList.toggle('is-complete', number < step);
+  });
+  stepProgressBar.style.width = `${step * 33.333}%`;
+  previousStep.hidden = step === 1;
+  nextStep.hidden = step === 3;
+  submitApplication.hidden = step !== 3;
+  if (step === 3) updateReview();
+  document.querySelector('.application-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function validateStep(step) {
+  if (step === 1 && !selectedValue('certificate')) {
+    draftStatus.textContent = '자격증을 하나 선택해 주세요.';
+    document.querySelector('input[name="certificate"]').focus();
+    return false;
+  }
+  if (step === 2) {
+    const nameVal = nameInput.value.trim();
+    if (!/^[가-힣]{2,}$/.test(nameVal) && !/^[a-zA-Z]{2,}$/.test(nameVal)) {
+      draftStatus.textContent = '이름을 한글 또는 영문으로 두 글자 이상 입력해 주세요.';
+      nameInput.focus();
+      return false;
+    }
+    if (phone.value.replace(/\D/g, '').length < 10) {
+      draftStatus.textContent = '연락처를 10~11자리로 입력해 주세요.';
+      phone.focus();
+      return false;
+    }
+    if (!selectedValue('gender')) {
+      draftStatus.textContent = '성별을 선택해 주세요.';
+      document.querySelector('input[name="gender"]').focus();
+      return false;
+    }
+    if (!document.querySelector('#regionFilter').value) {
+      draftStatus.textContent = '시험장 위치를 선택해 주세요.';
+      document.querySelector('#regionFilter').focus();
+      return false;
+    }
+  }
+  draftStatus.textContent = '';
+  return true;
+}
+
+function saveDraft(showMessage = true) {
+  const draft = { certificate: selectedValue('certificate'), name: nameInput.value, phone: phone.value, gender: selectedValue('gender'), region: document.querySelector('#regionFilter').value, savedAt: new Date().toISOString() };
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    if (showMessage) draftStatus.textContent = '작성한 내용이 이 기기에 임시저장되었습니다.';
+  } catch (error) {
+    draftStatus.textContent = '임시저장에 실패했습니다. 브라우저 설정을 확인해 주세요.';
+  }
+}
+
+function loadDraft() {
+  try {
+    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+    if (!draft) return;
+    if (draft.certificate) document.querySelector(`input[name="certificate"][value="${draft.certificate}"]`)?.click();
+    nameInput.value = draft.name || '';
+    phone.value = draft.phone || '';
+    if (draft.gender) document.querySelector(`input[name="gender"][value="${draft.gender}"]`)?.click();
+    document.querySelector('#regionFilter').value = draft.region || '';
+    draftStatus.textContent = '임시저장한 내용을 불러왔습니다. 이어서 작성해 주세요.';
+  } catch (error) {
+    localStorage.removeItem(DRAFT_KEY);
+  }
+}
+
+nextStep.addEventListener('click', () => {
+  if (validateStep(currentStep)) showStep(Math.min(3, currentStep + 1));
+});
+previousStep.addEventListener('click', () => showStep(Math.max(1, currentStep - 1)));
+saveDraftButton.addEventListener('click', () => saveDraft(true));
+loadDraft();
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  if (!privacyConsent.checked) {
+    draftStatus.textContent = '내용 확인 및 개인정보 이용 동의가 필요합니다.';
+    privacyConsent.focus();
+    return;
+  }
 
   const nameVal = nameInput.value.trim();
   const koreanNameRegex = /^[가-힣]{2,}$/;
@@ -185,6 +275,9 @@ form.addEventListener('submit', async (e) => {
     successModal.classList.add('is-open');
     result.innerHTML = '';
     form.reset();
+    localStorage.removeItem(DRAFT_KEY);
+    draftStatus.textContent = '';
+    showStep(1);
   } catch (err) {
     console.error('제출 오류:', err);
     result.innerHTML = `<div class="status error">접수 중 오류가 발생했습니다: ${err.message}</div>`;
