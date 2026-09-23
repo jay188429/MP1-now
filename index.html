@@ -13,6 +13,22 @@
 </style>
 <style>h1,h2,p,.notice{word-break:keep-all}.certificate-list{grid-template-columns:repeat(3,minmax(0,1fr))}.certificate-toggle{position:relative;display:block!important;min-height:0!important;padding:0!important;border:0!important;background:transparent!important}.certificate-toggle input{position:absolute;width:1px;height:1px;opacity:0}.certificate-toggle span{display:flex;align-items:center;justify-content:center;min-height:78px;padding:16px;border:1px solid #d2d2d7;border-radius:15px;background:#fff;color:var(--ink);text-align:center;font-size:17px;font-weight:650;box-shadow:0 2px 8px #1d1d1f08;transition:border-color .2s ease,background .2s ease,box-shadow .2s ease,transform .2s ease}.certificate-toggle:hover span{border-color:#a7a7ad;transform:translateY(-1px)}.certificate-toggle input:focus-visible+span{box-shadow:0 0 0 4px #0071e326}.certificate-toggle input:checked+span{border-color:var(--blue);background:var(--soft);box-shadow:0 0 0 3px #0071e31a;color:var(--blue)}.simple-grid{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:720px){.certificate-list,.simple-grid{grid-template-columns:1fr}.certificate-toggle span{min-height:66px}}</style>
 <style>.lookup-panel{display:grid;gap:14px}.lookup-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end}.lookup-result{color:var(--muted);white-space:pre-line}.modal-backdrop{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:#1d1d1f66;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease}.modal-backdrop.is-open{opacity:1;visibility:visible}.modal{width:min(100%,440px);padding:30px;border:1px solid #d2d2d7;border-radius:20px;background:#fff;box-shadow:0 24px 70px #1d1d1f33}.modal h2{margin-bottom:10px}.modal p{color:var(--muted)}.modal .button{width:100%}@media(max-width:620px){.lookup-row{grid-template-columns:1fr}.lookup-row .button{width:100%}}</style>
+<style>
+.floating-chat{position:fixed;left:24px;bottom:24px;z-index:30;font-size:16px}
+.floating-chat-toggle{display:inline-flex;align-items:center;gap:9px;border:0;border-radius:999px;padding:13px 18px 13px 14px;background:var(--blue);color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 10px 28px #0071e34d;transition:transform .2s ease,box-shadow .2s ease}
+.floating-chat-toggle:hover{transform:translateY(-2px);box-shadow:0 14px 32px #0071e359}
+.floating-chat-icon{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#fff;color:var(--blue);font-size:18px}
+.floating-chat-panel{position:absolute;left:0;bottom:62px;display:flex;flex-direction:column;width:min(380px,calc(100vw - 32px));height:min(560px,calc(100vh - 120px));overflow:hidden;border:1px solid #d2d2d7;border-radius:22px;background:#fff;box-shadow:0 18px 60px #1d1d1f33;opacity:0;visibility:hidden;transform:translateY(12px) scale(.98);transform-origin:bottom left;transition:opacity .2s ease,visibility .2s ease,transform .2s ease}
+.floating-chat.is-open .floating-chat-panel{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+.floating-chat-header{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;background:linear-gradient(135deg,var(--blue),#1496df);color:#fff}
+.floating-chat-title{display:flex;align-items:center;gap:10px}.floating-chat-title strong{display:block}.floating-chat-title small{display:block;margin-top:1px;opacity:.82;font-size:12px}
+.floating-chat-close{border:0;background:transparent;color:#fff;font-size:24px;line-height:1;cursor:pointer;padding:2px 4px}
+.floating-chat-messages{display:flex;flex:1;flex-direction:column;gap:10px;overflow-y:auto;padding:16px;background:#f7f9fc}
+.floating-chat-message{max-width:84%;padding:10px 13px;border-radius:15px;white-space:pre-line;word-break:keep-all;font-size:15px;line-height:1.5}.floating-chat-message.bot{align-self:flex-start;background:#fff;color:var(--ink);border:1px solid #e4e7ec;border-top-left-radius:5px}.floating-chat-message.user{align-self:flex-end;background:var(--blue);color:#fff;border-top-right-radius:5px}
+.floating-chat-source{margin-top:5px;color:var(--muted);font-size:11px}.floating-chat-message.user .floating-chat-source{color:#dceeff}
+.floating-chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid #e4e7ec;background:#fff}.floating-chat-input{min-height:44px!important;padding:9px 12px!important;border:1px solid #c7c7cc!important;border-radius:12px!important;font-size:15px!important}.floating-chat-send{min-width:58px!important;min-height:44px!important;padding:8px 12px!important;font-size:14px!important}
+@media(max-width:620px){.floating-chat{left:16px;bottom:16px}.floating-chat-panel{bottom:58px;height:min(560px,calc(100vh - 96px))}.floating-chat-toggle{padding-right:15px}.floating-chat-toggle span:last-child{font-size:15px}}
+</style>
 <script>window.va=window.va||function(){(window.va.q=window.va.q||[]).push(arguments)};</script><script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
@@ -78,6 +94,14 @@
 <section class="panel lookup-panel"><div><h2>내 접수 확인</h2><p>접수할 때 입력한 전화번호로 접수 상태를 확인할 수 있습니다.</p></div><div class="lookup-row"><label for="lookupPhone">연락처<input id="lookupPhone" inputmode="tel" autocomplete="tel" placeholder="010-1234-5678"></label><button class="button secondary" id="lookupButton" type="button">확인하기</button></div><div id="lookupResult" class="lookup-result" role="status" aria-live="polite"></div></section>
 <footer>작은 시작도 소중합니다. 접수 내용을 확인한 뒤 안내해 드리겠습니다.</footer>
 </main>
+<aside class="floating-chat" id="floatingChat" aria-label="자격증 챗봇">
+<div class="floating-chat-panel" id="floatingChatPanel" aria-hidden="true">
+<div class="floating-chat-header"><div class="floating-chat-title"><span class="floating-chat-icon" aria-hidden="true">✦</span><div><strong>자격증 도우미</strong><small>시험 접수 관련 질문을 도와드려요</small></div></div><button class="floating-chat-close" id="floatingChatClose" type="button" aria-label="챗봇 닫기">×</button></div>
+<div class="floating-chat-messages" id="floatingChatMessages" aria-live="polite"></div>
+<form class="floating-chat-form" id="floatingChatForm"><input class="floating-chat-input" id="floatingChatInput" type="text" placeholder="궁금한 내용을 입력하세요" autocomplete="off" aria-label="챗봇 질문"><button class="button floating-chat-send" id="floatingChatSend" type="submit">전송</button></form>
+</div>
+<button class="floating-chat-toggle" id="floatingChatToggle" type="button" aria-expanded="false" aria-controls="floatingChatPanel"><span class="floating-chat-icon" aria-hidden="true">✦</span><span>자격증 챗봇</span></button>
+</aside>
 <div class="modal-backdrop" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="modal"><h2 id="successTitle">접수가 완료되었습니다</h2><p id="successMessage">접수 내용을 확인한 뒤 안내해 드리겠습니다.</p><button class="button" id="closeModal" type="button">확인</button></div></div>
 
 <!-- Supabase CDN 및 스크립트 통폐합 -->
@@ -211,10 +235,12 @@ function initRouter() {
   if (window.location.pathname === '/faq' || window.location.pathname.endsWith('/faq')) {
     faqPage.style.display = 'block';
     mainPage.style.display = 'none';
+    document.querySelector('#floatingChat').style.display = 'none';
     initFAQChat();
   } else {
     faqPage.style.display = 'none';
     mainPage.style.display = 'block';
+    initFloatingChat();
   }
 }
 
@@ -298,6 +324,85 @@ function initFAQChat() {
   });
 
   addMessage('안녕하세요! 자격증 시험 접수 관련 질문에 답변해드립니다. 무엇을 도와드릴까요?', false);
+}
+
+function initFloatingChat() {
+  const chat = document.querySelector('#floatingChat');
+  const panel = document.querySelector('#floatingChatPanel');
+  const toggle = document.querySelector('#floatingChatToggle');
+  const close = document.querySelector('#floatingChatClose');
+  const messages = document.querySelector('#floatingChatMessages');
+  const form = document.querySelector('#floatingChatForm');
+  const input = document.querySelector('#floatingChatInput');
+  const send = document.querySelector('#floatingChatSend');
+  let welcomed = false;
+
+  function setOpen(isOpen) {
+    chat.classList.toggle('is-open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    panel.setAttribute('aria-hidden', String(!isOpen));
+    if (isOpen) {
+      if (!welcomed) {
+        addMessage('안녕하세요! 자격증 시험 접수 관련 질문을 도와드릴게요.\n어떤 자격증이 궁금하신가요?');
+        welcomed = true;
+      }
+      input.focus();
+    }
+  }
+
+  function addMessage(text, isUser = false, source = '') {
+    const message = document.createElement('div');
+    message.className = `floating-chat-message ${isUser ? 'user' : 'bot'}`;
+    message.textContent = text;
+    if (source) {
+      const sourceEl = document.createElement('div');
+      sourceEl.className = 'floating-chat-source';
+      sourceEl.textContent = source;
+      message.appendChild(sourceEl);
+    }
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const question = input.value.trim();
+    if (!question || send.disabled) return;
+    addMessage(question, true);
+    input.value = '';
+    send.disabled = true;
+    send.textContent = '...';
+    const loading = document.createElement('div');
+    loading.className = 'floating-chat-message bot';
+    loading.textContent = '관련 내용을 찾고 있어요...';
+    messages.appendChild(loading);
+    messages.scrollTop = messages.scrollHeight;
+
+    try {
+      const response = await fetch('/api/faq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: question })
+      });
+      if (!response.ok) throw new Error('API 오류');
+      const result = await response.json();
+      loading.remove();
+      addMessage(result.answer || '답변을 준비하지 못했습니다. 다시 질문해 주세요.', false, result.source);
+    } catch (error) {
+      loading.remove();
+      addMessage('잠시 연결이 원활하지 않습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      send.disabled = false;
+      send.textContent = '전송';
+      input.focus();
+    }
+  }
+
+  toggle.addEventListener('click', () => setOpen(!chat.classList.contains('is-open')));
+  close.addEventListener('click', () => setOpen(false));
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    sendMessage();
+  });
 }
 
 initRouter();
