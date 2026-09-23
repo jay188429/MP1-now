@@ -120,9 +120,9 @@ function unlockEntry() { document.querySelector('#entryGate').classList.add('is-
 document.querySelectorAll('[data-dialog-close]').forEach((button) => button.addEventListener('click', () => closeDialog(button.dataset.dialogClose)));
 document.querySelector('#gateApply').addEventListener('click', () => openDialog('applyMethodDialog'));
 document.querySelector('#gateLookup').addEventListener('click', () => openDialog('lookupDialog'));
-document.querySelector('#gateLogin').addEventListener('click', () => openDialog('loginDialog'));
-document.querySelector('#gateSignup').addEventListener('click', () => openDialog('signupDialog'));
-document.querySelector('#gateGuest').addEventListener('click', () => openDialog('consentDialog'));
+document.querySelector('#gateLogin').addEventListener('click', () => { closeDialog('applyMethodDialog'); openDialog('loginDialog'); });
+document.querySelector('#gateSignup').addEventListener('click', () => { closeDialog('applyMethodDialog'); openDialog('signupDialog'); });
+document.querySelector('#gateGuest').addEventListener('click', () => { closeDialog('applyMethodDialog'); openDialog('consentDialog'); });
 document.querySelector('#loginOpen').addEventListener('click', async () => {
   if (currentUser) {
     await supabaseClient.auth.signOut();
