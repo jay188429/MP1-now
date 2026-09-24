@@ -355,7 +355,10 @@ form.addEventListener('submit', async (e) => {
     showStep(1);
   } catch (err) {
     console.error('제출 오류:', err);
-    result.innerHTML = `<div class="status error">접수 중 오류가 발생했습니다: ${err.message}</div>`;
+    const message = err instanceof TypeError && /fetch/i.test(err.message)
+      ? '접수 서버에 연결되지 않았습니다. 잠시 후 다시 시도해 주세요. 문제가 계속되면 관리자에게 문의해 주세요.'
+      : `접수 중 오류가 발생했습니다: ${err.message}`;
+    result.innerHTML = `<div class="status error">${message}</div>`;
   }
 });
 
