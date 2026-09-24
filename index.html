@@ -57,7 +57,6 @@ body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0
 
 <main id="mainPage">
 <header><div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div><div class="nav"><a class="secondary" href="/admin.html">관리자</a></div></header>
-<section class="access-panel"><div class="access-copy"><strong id="accountGreeting">접수 방법을 선택해 주세요</strong><span id="accountStatus">로그인하면 접수내용을 더 편하게 확인할 수 있습니다.</span></div><div class="access-actions"><button class="button secondary" id="loginOpen" type="button">로그인</button><button class="button secondary" id="signupOpen" type="button">회원가입</button><button class="button" id="guestOpen" type="button">비회원으로 접수하기</button></div></section>
 <section class="hero"><h2>어렵지 않아요. 한 단계씩 안내해 드릴게요.</h2><p>원하시는 자격증을 고르고, 안내에 따라 기본정보를 입력하면 접수가 끝납니다. 작성 중에는 언제든 임시저장할 수 있습니다.</p><div class="notice">처음부터 끝까지 약 3분 정도 걸립니다. 잘 모르시는 내용은 왼쪽 아래 자격증 도우미에게 물어보세요.</div></section>
 <section class="panel application-panel"><div class="stepper" aria-label="접수 진행 단계"><div class="step-indicator is-active" data-step-indicator="1"><span>1</span><strong>자격증 선택</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="2"><span>2</span><strong>기본정보 입력</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="3"><span>3</span><strong>내용 확인</strong></div></div><div class="step-progress"><div id="stepProgressBar"></div></div><form id="applicationForm">
 <section class="form-step is-active" data-step="1"><h2>준비하실 자격증을 골라 주세요</h2><p class="section-lead">아래 버튼 중 하나를 눌러 선택해 주세요. 선택한 내용은 다음 단계로 이동해도 그대로 보관됩니다.</p>
@@ -121,35 +120,13 @@ document.querySelector('#gateLookup').addEventListener('click', () => { window.l
 document.querySelector('#gateLogin').addEventListener('click', () => { closeDialog('applyMethodDialog'); openDialog('loginDialog'); });
 document.querySelector('#gateSignup').addEventListener('click', () => { closeDialog('applyMethodDialog'); openDialog('signupDialog'); });
 document.querySelector('#gateGuest').addEventListener('click', () => { closeDialog('applyMethodDialog'); openDialog('consentDialog'); });
-document.querySelector('#loginOpen').addEventListener('click', async () => {
-  if (currentUser) {
-    await supabaseClient.auth.signOut();
-    setAccountView(null);
-  } else openDialog('loginDialog');
-});
-document.querySelector('#signupOpen').addEventListener('click', () => openDialog('signupDialog'));
-document.querySelector('#guestOpen').addEventListener('click', () => openDialog('consentDialog'));
 
 function setAccountView(user) {
   currentUser = user;
-  const greeting = document.querySelector('#accountGreeting');
-  const status = document.querySelector('#accountStatus');
-  const loginButton = document.querySelector('#loginOpen');
-  const signupButton = document.querySelector('#signupOpen');
   if (user) {
     unlockEntry();
-    const name = user.user_metadata?.name || user.email || '회원';
-    greeting.textContent = `${name}님, 접수를 시작해 주세요`;
-    status.textContent = '로그인 상태입니다. 입력한 접수내용을 다시 확인하기 편합니다.';
-    loginButton.textContent = '로그아웃';
-    signupButton.hidden = true;
     if (user.user_metadata?.name) nameInput.value = user.user_metadata.name;
     if (user.user_metadata?.phone) phone.value = formatPhone(user.user_metadata.phone);
-  } else {
-    greeting.textContent = '접수 방법을 선택해 주세요';
-    status.textContent = '로그인하면 접수내용을 더 편하게 확인할 수 있습니다.';
-    loginButton.textContent = '로그인';
-    signupButton.hidden = false;
   }
 }
 
