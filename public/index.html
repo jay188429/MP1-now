@@ -40,6 +40,7 @@ body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0
 .entry-gate-card>.entry-gate-actions{grid-template-columns:repeat(2,minmax(220px,1fr));max-width:520px;margin:0 auto}
 @media(max-width:620px){.entry-gate-card>.entry-gate-actions{grid-template-columns:1fr;max-width:none}}
 </style>
+<style>.button[hidden]{display:none!important}</style>
 </head>
 <body>
 <div class="entry-gate" id="entryGate"><div class="entry-gate-card"><div class="eyebrow">NOW자격지원센터</div><h2>무엇을 하실까요?</h2><p>접수를 새로 하시려면 ‘접수하기’를, 이미 접수하셨다면 ‘접수 확인하기’를 눌러 주세요.</p><div class="entry-gate-actions"><button class="button" id="gateApply" type="button">접수하기<small>새로 신청하기</small></button><button class="button secondary" id="gateLookup" type="button">접수 확인하기<small>접수내용·수험표</small></button></div></div></div>
@@ -329,8 +330,7 @@ form.addEventListener('submit', async (e) => {
   const formData = {
     certificate: certRadio ? certRadio.value : '',
     name: nameVal,
-    gender: genderRadio ? genderRadio.value : '',
-    region: regionSelect ? regionSelect.value : '',
+    note: JSON.stringify({ gender: genderRadio ? genderRadio.value : '', region: regionSelect ? regionSelect.value : '' }),
     phone: phoneClean,
     received_at: new Date().toISOString()
   };
@@ -377,9 +377,11 @@ function printExamTicket(app) {
 
 function renderLookupResult(app, target) {
   const date = new Date(app.received_at).toLocaleDateString('ko-KR');
+  let extra = {};
+  try { extra = JSON.parse(app.note || '{}'); } catch (error) {}
   const status = app.status || '접수대기';
   const ticketReady = status.includes('수험표');
-  target.innerHTML = `<div class="lookup-result-card"><h3>접수내용 확인</h3><div class="lookup-detail-grid"><div><span>이름</span><strong>${escapeHtml(app.name)}</strong></div><div><span>연락처</span><strong>${escapeHtml(app.phone)}</strong></div><div><span>신청 자격증</span><strong>${escapeHtml(app.certificate)}</strong></div><div><span>성별</span><strong>${escapeHtml(app.gender || '미입력')}</strong></div><div><span>희망 지역</span><strong>${escapeHtml(app.region || '미입력')}</strong></div><div><span>접수일</span><strong>${date}</strong></div></div><div class="ticket-ready"><span>현재 상태: ${escapeHtml(status)}</span>${ticketReady ? `<button class="button" type="button" onclick='printExamTicket(${JSON.stringify(app).replace(/'/g, '&#39;')})'>수험표 인쇄</button>` : ''}</div><p class="lookup-help">${ticketReady ? '수험표를 인쇄해 시험 당일 신분증과 함께 지참해 주세요.' : '수험표가 발급되면 이곳에 인쇄 버튼이 나타납니다.'}</p></div>`;
+    target.innerHTML = `<div class="lookup-result-card"><h3>접수내용 확인</h3><div class="lookup-detail-grid"><div><span>이름</span><strong>${escapeHtml(app.name)}</strong></div><div><span>연락처</span><strong>${escapeHtml(app.phone)}</strong></div><div><span>신청 자격증</span><strong>${escapeHtml(app.certificate)}</strong></div><div><span>성별</span><strong>${escapeHtml(app.gender || extra.gender || '미입력')}</strong></div><div><span>희망 지역</span><strong>${escapeHtml(app.region || extra.region || '미입력')}</strong></div><div><span>접수일</span><strong>${date}</strong></div></div><div class="ticket-ready"><span>현재 상태: ${escapeHtml(status)}</span>${ticketReady ? `<button class="button" type="button" onclick='printExamTicket(${JSON.stringify(app).replace(/'/g, '&#39;')})'>수험표 인쇄</button>` : ''}</div><p class="lookup-help">${ticketReady ? '수험표를 인쇄해 시험 당일 신분증과 함께 지참해 주세요.' : '수험표가 발급되면 이곳에 인쇄 버튼이 나타납니다.'}</p></div>`;
 }
 
 async function lookupApplication(rawPhone, target) {
