@@ -100,6 +100,9 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const form = document.querySelector("#applicationForm");
+// 단계별 화면에서 숨겨진 입력칸이 브라우저 기본 검증을 가로막지 않도록
+// 접수 폼은 아래 JavaScript 단계 검증을 사용한다.
+form.querySelectorAll('[required]').forEach((field) => field.removeAttribute('required'));
 const nameInput = document.querySelector("#name");
 const phone = document.querySelector("#phone");
 const result = document.querySelector("#result");
