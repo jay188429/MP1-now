@@ -14,10 +14,15 @@
 <section class="panel"><h2>접수한 연락처를 입력해 주세요</h2><p class="lead">수험표가 발급되면 이 화면에서 바로 인쇄할 수 있습니다.</p><form class="lookup-form" id="checkForm"><div class="field"><label for="phone">연락처</label><input id="phone" inputmode="tel" autocomplete="tel" required placeholder="010-1234-5678"></div><button class="button" type="submit">접수내용 확인</button></form><div class="result" id="result" role="status" aria-live="polite"></div></section>
 <a class="back" href="/">← 접수하기로 돌아가기</a>
 </main>
+<script src="/supabase-config.js"></script>
+<script>
+window.SUPABASE_URL = "https://spgmrgthwpdukobiozgh.supabase.co";
+window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwZ21yZ3Rod3BkdWtvYmlvemdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NzIyNTEsImV4cCI6MjEwNjI0ODI1MX0.2lR3b97iQNCAtBCJ0a30Z0RXjiwe6J1CjG7vjQzuT2I";
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://ozducztaqcxpomomggve.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZHVjenRhcWN4cG9tb21nZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODI3MTMsImV4cCI6MjEwMjY1ODcxM30.tKdLUEkzqMYmSgB2sfgwdqEp3fkEy2yjP7GGEWY7Sxo";
+const SUPABASE_URL = window.SUPABASE_URL;
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const phoneInput = document.querySelector('#phone');
 const result = document.querySelector('#result');

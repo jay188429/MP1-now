@@ -93,10 +93,15 @@ body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0
 <div class="dialog-backdrop" id="signupDialog" role="dialog" aria-modal="true" aria-labelledby="signupTitle"><div class="dialog-card"><button class="dialog-close" data-dialog-close="signupDialog" type="button" aria-label="닫기">×</button><h2 id="signupTitle">회원가입</h2><p class="dialog-description">가입하면 다음 접수부터 정보를 편하게 불러올 수 있습니다.</p><form class="dialog-form" id="signupForm"><div class="field"><label for="signupName">이름 *</label><input id="signupName" required placeholder="홍길동"></div><div class="field"><label for="signupPhone">연락처 *</label><input id="signupPhone" required inputmode="tel" placeholder="010-1234-5678"></div><div class="field"><label for="signupEmail">이메일 *</label><input id="signupEmail" type="email" required autocomplete="email" placeholder="이메일을 입력하세요"></div><div class="field"><label for="signupPassword">비밀번호 *</label><input id="signupPassword" type="password" required minlength="6" autocomplete="new-password" placeholder="6자 이상 입력하세요"></div><label class="consent-box"><input id="signupConsent" type="checkbox" required><span>개인정보 수집·이용 및 회원 서비스 제공에 동의합니다.</span></label><div class="dialog-actions"><button class="button secondary" data-dialog-close="signupDialog" type="button">취소</button><button class="button" type="submit">회원가입</button></div><p class="account-status" id="signupStatus" role="status"></p></form></div></div>
 
 <!-- Supabase CDN 및 스크립트 통폐합 -->
+<script src="/supabase-config.js"></script>
+<script>
+window.SUPABASE_URL = "https://spgmrgthwpdukobiozgh.supabase.co";
+window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwZ21yZ3Rod3BkdWtvYmlvemdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NzIyNTEsImV4cCI6MjEwNjI0ODI1MX0.2lR3b97iQNCAtBCJ0a30Z0RXjiwe6J1CjG7vjQzuT2I";
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://ozducztaqcxpomomggve.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZHVjenRhcWN4cG9tb21nZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODI3MTMsImV4cCI6MjEwMjY1ODcxM30.tKdLUEkzqMYmSgB2sfgwdqEp3fkEy2yjP7GGEWY7Sxo";
+const SUPABASE_URL = window.SUPABASE_URL;
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const form = document.querySelector("#applicationForm");

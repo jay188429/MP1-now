@@ -80,6 +80,11 @@
 </div>
 </main>
 
+<script src="/supabase-config.js"></script>
+<script>
+window.SUPABASE_URL = "https://spgmrgthwpdukobiozgh.supabase.co";
+window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwZ21yZ3Rod3BkdWtvYmlvemdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NzIyNTEsImV4cCI6MjEwNjI0ODI1MX0.2lR3b97iQNCAtBCJ0a30Z0RXjiwe6J1CjG7vjQzuT2I";
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const ADMIN_PASSWORD = '';
@@ -106,8 +111,8 @@ document.querySelector('#passwordInput').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') checkPassword();
 });
 
-const SUPABASE_URL = "https://ozducztaqcxpomomggve.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96ZHVjenRhcWN4cG9tb21nZ3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODI3MTMsImV4cCI6MjEwMjY1ODcxM30.tKdLUEkzqMYmSgB2sfgwdqEp3fkEy2yjP7GGEWY7Sxo";
+const SUPABASE_URL = window.SUPABASE_URL;
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let allData = [];
 
