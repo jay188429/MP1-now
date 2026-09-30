@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NOW자격지원센터 | 자격증 접수</title>
+<title>나우자격지원센터 | 자격증 시험 접수</title>
 <style>
 :root{--ink:#17202a;--muted:#5b6670;--paper:#fffdf8;--blue:#075985;--blue-dark:#064e73;--yellow:#facc15;--line:#cbd5e1;--soft:#e0f2fe;--danger:#b42318}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fefce8 0,#f0f9ff 52%,#ecfdf5 100%);color:var(--ink);font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:18px;line-height:1.6}main{max-width:1080px;margin:auto;padding:28px 18px 60px}header{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:26px}h1,h2{line-height:1.2;margin:0 0 12px}h1{font-size:clamp(28px,4vw,42px)}h2{font-size:28px}.eyebrow{font-weight:800;color:var(--blue);letter-spacing:.04em}.nav{display:flex;gap:10px;flex-wrap:wrap}.nav a,.button{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:10px 18px;border:2px solid var(--blue);border-radius:8px;background:var(--blue);color:white;text-decoration:none;font-weight:800;cursor:pointer}.nav a.secondary,.button.secondary{background:white;color:var(--blue)}.hero,.panel{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08)}.hero{padding:28px;margin-bottom:20px}.notice{border-left:7px solid var(--yellow);background:#fff7c2;padding:14px 16px;font-weight:700}.panel{padding:24px;margin-top:20px}form{display:grid;gap:18px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.field{display:grid;gap:7px}label{font-weight:800}input,select,textarea{font:inherit;width:100%;padding:12px 14px;border:2px solid #94a3b8;border-radius:8px;background:white;color:var(--ink);min-height:52px}textarea{min-height:100px;resize:vertical}.help{font-size:16px;color:var(--muted)}.full{grid-column:1/-1}.certificate-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.certificate-list label{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:8px;padding:14px;background:white;cursor:pointer;min-height:72px}.certificate-list label:has(input:checked){border-color:var(--blue);background:var(--soft)}input[type=radio]{width:24px;min-height:24px;accent-color:var(--blue)}.status{padding:14px;border-radius:8px;background:#ecfdf5;border:1px solid #86efac;font-weight:800}.status.error{background:#fff1f2;border-color:#fda4af;color:var(--danger)}footer{margin-top:28px;color:var(--muted);font-size:16px}@media(max-width:720px){main{padding:18px 12px 40px}.grid,.certificate-list{grid-template-columns:1fr}.panel,.hero{padding:18px}.nav a{flex:1}.button{width:100%}}
 </style>
@@ -43,9 +43,9 @@ body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0
 <style>.button[hidden]{display:none!important}</style>
 </head>
 <body>
-<div class="entry-gate" id="entryGate"><div class="entry-gate-card"><div class="eyebrow">NOW자격지원센터</div><h2>무엇을 하실까요?</h2><p>접수를 새로 하시려면 ‘접수하기’를, 이미 접수하셨다면 ‘접수 확인하기’를 눌러 주세요.</p><div class="entry-gate-actions"><button class="button" id="gateApply" type="button">접수하기<small>새로 신청하기</small></button><button class="button secondary" id="gateLookup" type="button">접수 확인하기<small>접수내용·수험표</small></button></div></div></div>
+<div class="entry-gate" id="entryGate"><div class="entry-gate-card"><div class="eyebrow">나우자격지원센터</div><h2>원하시는 업무를 선택해 주세요</h2><p>처음 신청하시면 ‘접수하기’를, 이미 신청하셨다면 ‘접수 확인하기’를 선택해 주세요.</p><div class="entry-gate-actions"><button class="button" id="gateApply" type="button">접수하기<small>새로 신청하기</small></button><button class="button secondary" id="gateLookup" type="button">접수 확인하기<small>접수내용·수험표</small></button></div></div></div>
 <div id="faqPage" style="display:none;max-width:900px;margin:auto;padding:28px 18px 60px">
-<header style="margin-bottom:26px"><h1 style="font-size:32px;margin:0;font-weight:700">자격증 FAQ 챗봇</h1><p style="color:var(--muted);margin:4px 0 0">자격증 시험 접수 관련 질문에 답변합니다</p></header>
+<header style="margin-bottom:26px"><h1 style="font-size:32px;margin:0;font-weight:700">자격증 안내 도우미</h1><p style="color:var(--muted);margin:4px 0 0">자격증 시험 접수에 필요한 정보를 안내해 드립니다</p></header>
 <div id="chatContainer" style="background:white;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08);display:flex;flex-direction:column;height:600px;overflow:hidden">
 <div id="messages" style="flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px"></div>
 <div id="inputArea" style="display:flex;gap:8px;padding:16px;border-top:1px solid var(--line)">
@@ -57,8 +57,8 @@ body{background:radial-gradient(circle at 50% -20%,#fffdf8 0,#f7f4ed 52%,#edf3f0
 </div>
 
 <main id="mainPage">
-<header><div><div class="eyebrow">NOW자격지원센터</div><h1>자격증 접수</h1></div><div class="nav"><a class="secondary" href="/admin.html">관리자</a></div></header>
-<section class="hero"><h2>어렵지 않아요. 한 단계씩 안내해 드릴게요.</h2><p>원하시는 자격증을 고르고, 안내에 따라 기본정보를 입력하면 접수가 끝납니다. 작성 중에는 언제든 임시저장할 수 있습니다.</p><div class="notice">처음부터 끝까지 약 3분 정도 걸립니다. 잘 모르시는 내용은 왼쪽 아래 자격증 도우미에게 물어보세요.</div></section>
+<header><div><div class="eyebrow">나우자격지원센터</div><h1>자격증 시험 접수</h1></div><div class="nav"><a class="secondary" href="/admin.html">접수 관리자</a><a class="secondary" href="/manage-faq.html">챗봇 관리자</a></div></header>
+<section class="hero"><h2>필요한 자격증을 선택하고, 차근차근 접수해 주세요.</h2><p>안내에 따라 기본 정보를 입력하면 접수가 완료됩니다. 작성 중인 내용은 언제든 임시저장할 수 있습니다.</p><div class="notice">약 3분이면 접수가 완료됩니다. 궁금한 점은 자격증 안내 도우미가 도와드립니다.</div></section>
 <section class="panel application-panel"><div class="stepper" aria-label="접수 진행 단계"><div class="step-indicator is-active" data-step-indicator="1"><span>1</span><strong>자격증 선택</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="2"><span>2</span><strong>기본정보 입력</strong></div><div class="step-line"></div><div class="step-indicator" data-step-indicator="3"><span>3</span><strong>내용 확인</strong></div></div><div class="step-progress"><div id="stepProgressBar"></div></div><form id="applicationForm">
 <section class="form-step is-active" data-step="1"><h2>준비하실 자격증을 골라 주세요</h2><p class="section-lead">아래 버튼 중 하나를 눌러 선택해 주세요. 선택한 내용은 다음 단계로 이동해도 그대로 보관됩니다.</p>
 <div class="field full"><label>원하시는 자격증 <span aria-hidden="true">*</span></label><div class="certificate-list" role="radiogroup" aria-label="자격증 선택">
@@ -340,6 +340,7 @@ form.addEventListener('submit', async (e) => {
     name: nameVal,
     note: JSON.stringify({ gender: genderRadio ? genderRadio.value : '', region: regionSelect ? regionSelect.value : '' }),
     phone: phoneClean,
+    status: '접수완료',
     received_at: new Date().toISOString()
   };
 
@@ -352,12 +353,13 @@ form.addEventListener('submit', async (e) => {
 
     if (error) throw error;
 
-    successModal.classList.add('is-open');
     result.innerHTML = '';
     form.reset();
     localStorage.removeItem(DRAFT_KEY);
     draftStatus.textContent = '';
-    showStep(1);
+    // 접수 직후에는 방금 접수한 연락처로 확인 페이지를 열어
+    // 접수내용과 수험표를 바로 확인할 수 있게 한다.
+    window.location.href = `/check.html?phone=${encodeURIComponent(phoneClean)}`;
   } catch (err) {
     console.error('제출 오류:', err);
     const message = err instanceof TypeError && /fetch/i.test(err.message)
@@ -382,7 +384,7 @@ function printExamTicket(app) {
     return;
   }
   const receivedDate = new Date(app.received_at).toLocaleDateString('ko-KR');
-  printWindow.document.write(`<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>수험표 - ${escapeHtml(app.name)}</title><style>body{font-family:Arial,"Noto Sans KR",sans-serif;color:#24343b;padding:40px}.ticket{max-width:640px;margin:auto;border:2px solid #315b72;border-radius:18px;padding:30px}.brand{color:#315b72;font-weight:800}.title{text-align:center;margin:28px 0;font-size:30px}.row{display:flex;border-bottom:1px solid #d7d8d2;padding:14px 0}.label{width:130px;color:#5f7077}.value{font-weight:700}.notice{margin-top:24px;padding:15px;background:#f4e7bf;border-radius:10px}@media print{body{padding:0}.ticket{border:2px solid #315b72}}</style></head><body><article class="ticket"><div class="brand">NOW자격지원센터</div><h1 class="title">수험표</h1><div class="row"><span class="label">성명</span><span class="value">${escapeHtml(app.name)}</span></div><div class="row"><span class="label">응시 종목</span><span class="value">${escapeHtml(app.certificate)}</span></div><div class="row"><span class="label">연락처</span><span class="value">${escapeHtml(app.phone)}</span></div><div class="row"><span class="label">접수일</span><span class="value">${receivedDate}</span></div><div class="row"><span class="label">접수 상태</span><span class="value">수험표 발급</span></div><div class="notice">시험 일시와 장소가 별도로 안내된 경우 안내받은 내용을 꼭 확인해 주세요. 시험 당일에는 신분증과 수험표를 함께 지참해 주세요.</div></article><script>window.onload=()=>window.print();<\/script></body></html>`);
+  printWindow.document.write(`<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>수험표 - ${escapeHtml(app.name)}</title><style>body{font-family:Arial,"Noto Sans KR",sans-serif;color:#24343b;padding:40px}.ticket{max-width:640px;margin:auto;border:2px solid #315b72;border-radius:18px;padding:30px}.brand{color:#315b72;font-weight:800}.title{text-align:center;margin:28px 0;font-size:30px}.row{display:flex;border-bottom:1px solid #d7d8d2;padding:14px 0}.label{width:130px;color:#5f7077}.value{font-weight:700}.notice{margin-top:24px;padding:15px;background:#f4e7bf;border-radius:10px}@media print{body{padding:0}.ticket{border:2px solid #315b72}}</style></head><body><article class="ticket"><div class="brand">나우자격지원센터</div><h1 class="title">수험표</h1><div class="row"><span class="label">성명</span><span class="value">${escapeHtml(app.name)}</span></div><div class="row"><span class="label">응시 종목</span><span class="value">${escapeHtml(app.certificate)}</span></div><div class="row"><span class="label">연락처</span><span class="value">${escapeHtml(app.phone)}</span></div><div class="row"><span class="label">접수일</span><span class="value">${receivedDate}</span></div><div class="row"><span class="label">접수 상태</span><span class="value">수험표 발급</span></div><div class="notice">시험 일시와 장소가 별도로 안내된 경우 안내받은 내용을 꼭 확인해 주세요. 시험 당일에는 신분증과 수험표를 함께 지참해 주세요.</div></article><script>window.onload=()=>window.print();<\/script></body></html>`);
   printWindow.document.close();
 }
 
@@ -390,8 +392,10 @@ function renderLookupResult(app, target) {
   const date = new Date(app.received_at).toLocaleDateString('ko-KR');
   let extra = {};
   try { extra = JSON.parse(app.note || '{}'); } catch (error) {}
-  const status = app.status || '접수대기';
-  const ticketReady = status.includes('수험표');
+  const status = !app.status || app.status === '접수대기' ? '접수완료' : app.status;
+  // 접수 완료 건은 상태와 관계없이 확인 페이지에서 수험표를 출력할 수 있다.
+  // 관리자가 발급 상태를 바꾼 경우에도 동일하게 동작한다.
+  const ticketReady = true;
     target.innerHTML = `<div class="lookup-result-card"><h3>접수내용 확인</h3><div class="lookup-detail-grid"><div><span>이름</span><strong>${escapeHtml(app.name)}</strong></div><div><span>연락처</span><strong>${escapeHtml(app.phone)}</strong></div><div><span>신청 자격증</span><strong>${escapeHtml(app.certificate)}</strong></div><div><span>성별</span><strong>${escapeHtml(app.gender || extra.gender || '미입력')}</strong></div><div><span>희망 지역</span><strong>${escapeHtml(app.region || extra.region || '미입력')}</strong></div><div><span>접수일</span><strong>${date}</strong></div></div><div class="ticket-ready"><span>현재 상태: ${escapeHtml(status)}</span>${ticketReady ? `<button class="button" type="button" onclick='printExamTicket(${JSON.stringify(app).replace(/'/g, '&#39;')})'>수험표 인쇄</button>` : ''}</div><p class="lookup-help">${ticketReady ? '수험표를 인쇄해 시험 당일 신분증과 함께 지참해 주세요.' : '수험표가 발급되면 이곳에 인쇄 버튼이 나타납니다.'}</p></div>`;
 }
 
@@ -430,6 +434,7 @@ function initFAQChat() {
   const messagesDiv = document.querySelector('#messages');
   const messageInput = document.querySelector('#messageInput');
   const sendBtn = document.querySelector('#sendBtn');
+  const conversation = [];
 
   function addMessage(text, isUser = false, source = '') {
     const div = document.createElement('div');
@@ -479,7 +484,7 @@ function initFAQChat() {
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({ message, context: conversation.slice(-8) })
       });
 
       clearInterval(bufferInterval);
@@ -489,6 +494,7 @@ function initFAQChat() {
 
       const result = await response.json();
       addMessage(result.answer, false, result.source);
+      conversation.push(message);
     } catch (error) {
       clearInterval(bufferInterval);
       messagesDiv.removeChild(loadingDiv);

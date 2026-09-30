@@ -12,6 +12,10 @@
 //       즉 실제 답변 가능한 문서는 1,203건(25.6%)뿐이었다.
 //  5) IDF와 문서 벡터를 로드 시 1회만 계산한다. (기존에는 매 질의마다 재계산)
 
+// 교육용 데이터(4,705건)에 없는 항목을 공식 안내로 보강한 문서.
+// 교육용 문서와 같은 방식(종목 필터 + TF-IDF)으로 검색되고, 답변 출처에 "공식 안내 보강"으로 표시된다.
+const OFFICIAL_SUPPLEMENT = require('./_official_supplement.js');
+
 let FAQ = [];
 let faqLoaded = false;
 let docTermFreq = [];  // 각 문서의 단어 빈도
@@ -48,9 +52,25 @@ const CERT_ALIASES = {
   "손해평가사":  ["손해평가사", "손평사"]
 };
 
+// 되물을 때 보여줄 종목 이름 (CERT_ALIASES의 키 순서와 무관하게 8종 전부)
+const CERT_DISPLAY = {
+  "굴착기": "굴착기", "한식조리": "한식조리", "지게차": "지게차", "전기": "전기기능사",
+  "공인중개사": "공인중개사", "손해평가사": "손해평가사", "요양보호사": "요양보호사", "위생사": "위생사"
+};
+
+// 검색 후보 종목을 앞에 두고 나머지 종목을 이어 붙여 8종을 모두 보여준다.
+function certChoices(candidates = []) {
+  const all = Object.keys(CERT_DISPLAY);
+  const ordered = [...candidates.filter(c => all.includes(c)), ...all.filter(c => !candidates.includes(c))];
+  return ordered.map(c => CERT_DISPLAY[c]);
+}
+
 function expandSynonyms(text) {
   let expanded = text;
   for (const [short, full] of Object.entries(SYNONYMS_DICT)) {
+    // 이미 완성된 자격증명이 포함된 경우, 그 안의 짧은 문자열(예:
+    // 공인중개사의 "개사")을 다시 치환하면 검색어가 깨진다.
+    if (expanded.includes(full)) continue;
     const regex = new RegExp(short, 'gi');
     expanded = expanded.replace(regex, full);
   }
@@ -72,6 +92,30 @@ function detectCert(question) {
     }
   }
   return matched;
+}
+
+// 종목명만 입력한 경우는 검색 실패가 아니라 사용자의 종목 선택이다.
+// 이 상태에서 FAQ 유사도 검색을 하면 종목명은 모든 해당 문서에 공통으로
+// 들어 있어 IDF가 0이 되므로, 잘못해서 "FAQ 없음"으로 처리될 수 있다.
+function isCertOnlyQuestion(question, cert) {
+  if (!cert) return false;
+  let rest = expandSynonyms(question);
+  const aliases = CERT_ALIASES[cert] || [];
+  for (const alias of aliases) {
+    rest = rest.replace(new RegExp(alias, 'gi'), '');
+  }
+  return !/[가-힣a-zA-Z0-9]/.test(rest);
+}
+
+function isEligibilityQuestion(question) {
+  return /응시\s*(자격|조건)|응시할\s*수|시험\s*자격/.test(question);
+}
+
+// 응시자격을 다루는 문서인지. 응시자격 질문에 접수 방법·응시료 문서로 답하지 않기 위해 쓴다.
+function isEligibilityDoc(doc) {
+  if (['응시자격', '학력요건', '교육이수'].includes(doc.category)) return true;
+  const text = [doc.category, doc.title, doc.body].filter(Boolean).join(' ');
+  return /응시\s*(자격|조건)/.test(text);
 }
 
 // 문서를 색인용 텍스트 한 덩어리로 만든다.
@@ -192,19 +236,23 @@ function buildQueryVector(question) {
  *  - { cert, needCert: false, results: [[score, doc], ...] }
  *  - { cert: null, needCert: true, candidates: [자격증명...] }  → 되물어야 하는 경우
  */
-function retrieve(question, topK = 3) {
+function retrieve(question, context = '', topK = 3, opts = {}) {
   if (!FAQ.length || !docVectors.length) {
     return { cert: null, needCert: false, results: [] };
   }
 
   const { vec, norm } = buildQueryVector(question);
-  const cert = detectCert(question);
+  // 후속 질문(예: "접수 기간은?")에는 종목명이 없을 수 있으므로
+  // 이전 사용자 발화에서 확인한 종목을 대화 맥락으로 이어받는다.
+  const cert = detectCert(question) || detectCert(context);
 
   // 1) 종목이 식별된 경우: 해당 종목 문서 안에서만 찾는다
   if (cert) {
     const scored = [];
     for (let i = 0; i < FAQ.length; i++) {
       if (FAQ[i].cert !== cert) continue;
+      // 응시자격 질문이면 응시자격을 다루는 문서 안에서만 찾는다 (없으면 답하지 않는다)
+      if (opts.eligibility && !isEligibilityDoc(FAQ[i])) continue;
       scored.push([cosineSimilarity(vec, norm, i), FAQ[i]]);
     }
     scored.sort((a, b) => b[0] - a[0]);
@@ -234,14 +282,44 @@ function retrieve(question, topK = 3) {
   };
 }
 
-async function answerQuestion(question) {
-  const found = retrieve(question);
+async function answerQuestion(question, context = '') {
+  const directCert = detectCert(question);
+  const contextualCert = directCert || detectCert(context);
+  const certOnly = isCertOnlyQuestion(question, directCert);
+
+  // 자격증 선택 버튼/단독 입력은 FAQ 검색으로 보내지 않고 다음 의도를 묻는다.
+  if (directCert && certOnly && !context.trim()) {
+    return {
+      status: 'NEED_TOPIC',
+      answer: `${directCert}에 대해 어떤 내용이 궁금하신가요? (응시자격 · 접수 기간 · 접수 방법 · 시험 일정 등)`,
+      source: '질문 내용 확인 필요',
+      score: 0
+    };
+  }
+
+  // 앞서 종목을 생략한 질문을 했고(예: "접수 기간은 언제인가요?"),
+  // 다음 발화로 종목만 선택한 경우에는 두 발화를 하나의 질문으로 검색한다.
+  // 그래야 종목 선택 직후 엉뚱한 FAQ(예: 접수 방법)가 선택되지 않는다.
+  const effectiveQuestion = certOnly && context.trim()
+    ? `${context} ${question}`
+    : question;
+
+  if (certOnly && !context.trim()) {
+    return {
+      status: 'NEED_TOPIC',
+      answer: `${directCert}에 대해 어떤 내용이 궁금하신가요? (접수 기간 · 접수 방법 · 시험 일정 등)`,
+      source: '질문 내용 확인 필요',
+      score: 0
+    };
+  }
+
+  const found = retrieve(effectiveQuestion, context, 3, { eligibility: isEligibilityQuestion(question) });
 
   // 어느 자격증인지 모르면 답을 만들지 않고 되묻는다
   if (found.needCert) {
     return {
       status: 'NEED_CERT',
-      answer: `어느 자격증에 대한 질문인지 알려주세요. (${found.candidates.join(' · ')})`,
+      answer: `어느 자격증에 대한 질문인지 알려주세요. (${certChoices(found.candidates).join(' · ')})`,
       source: '종목 확인 필요',
       score: 0
     };
@@ -257,7 +335,7 @@ async function answerQuestion(question) {
   }
 
   // 답변을 만들 수 있는 첫 번째 결과를 고른다
-  const { vec, norm } = buildQueryVector(question);
+  const { vec, norm } = buildQueryVector(effectiveQuestion);
   let picked = null;
   for (const [score, doc] of found.results) {
     const reply = pickReply(doc, vec, norm);
@@ -279,21 +357,24 @@ async function answerQuestion(question) {
   return {
     status: 'FALLBACK_ANSWERED',
     answer: `${fallbackReply}`,
-    source: `${cert} - ${title} (유사도: ${(bestScore).toFixed(2)})`,
+    source: bestDoc.origin === 'official'
+      ? `${cert} - ${title} (${bestDoc.source_note || '공식 안내 보강'} · 유사도: ${(bestScore).toFixed(2)})`
+      : `${cert} - ${title} (유사도: ${(bestScore).toFixed(2)})`,
     score: bestScore
   };
 }
 
 async function loadFAQ() {
   try {
-    const response = await fetch('https://mp1-now.vercel.app/faq_combined.jsonl');
+    const response = await fetch('https://senior-cert-faq.vercel.app/faq_combined.jsonl');
     if (response.ok) {
       const text = await response.text();
       FAQ = text
         .split('\n')
         .map(line => line.trim())
         .filter(line => line)
-        .map(line => JSON.parse(line));
+        .map(line => JSON.parse(line))
+        .concat(OFFICIAL_SUPPLEMENT);
 
       // TF 미리 계산
       docTermFreq = FAQ.map(doc => computeTF(tokenize(makeTextBlob(doc))));
@@ -327,7 +408,7 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { message } = req.body;
+  const { message, context } = req.body;
 
   if (!message) {
     return res.status(400).json({ error: 'message 필드가 필요합니다' });
@@ -344,7 +425,10 @@ module.exports = async (req, res) => {
       await loadFAQ();
     }
 
-    const result = await answerQuestion(message);
+    const conversationContext = Array.isArray(context)
+      ? context.filter(item => typeof item === 'string').slice(-8).join(' ')
+      : typeof context === 'string' ? context : '';
+    const result = await answerQuestion(message, conversationContext);
     return res.status(200).json(result);
   } catch (error) {
     console.error('Error:', error);
