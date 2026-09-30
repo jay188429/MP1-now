@@ -6,7 +6,7 @@
 //         ※ 라벨이 질문 내용과 다른 문의가 14건 있어(예: 한식조리 질문에 '전기' 라벨) 따로 셈
 // 규칙:   질문으로 쓴 문의 자신의 문서는 검색 대상에서 빼고 채점 (자기 답을 베끼지 않게)
 //
-// 실행:  node eval/run_eval.cjs      (MP1-now 폴더에서)
+// 실행:  node eval/run_eval.cjs      (senior-cert-faq-chatbot 폴더에서)
 const fs = require('fs');
 const path = require('path');
 

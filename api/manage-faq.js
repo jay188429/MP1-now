@@ -5,7 +5,7 @@ let faqLoaded = false;
 
 async function loadFAQ() {
   try {
-    const response = await fetch('https://mp1-now.vercel.app/faq_combined.jsonl');
+    const response = await fetch('https://senior-cert-faq.vercel.app/faq_combined.jsonl');
     if (response.ok) {
       const text = await response.text();
       FAQ = text

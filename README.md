@@ -1,4 +1,4 @@
-# MP1-now: 자격증 FAQ 챗봇 시스템
+# Senior Cert FAQ Chatbot: 자격증 FAQ 챗봇 시스템
 
 TF-IDF 기반 검색과 Gemini API를 활용한 지능형 자격증 시험 접수 FAQ 챗봇입니다.
 
@@ -16,10 +16,10 @@ TF-IDF 기반 검색과 Gemini API를 활용한 지능형 자격증 시험 접�
 ## 🚀 배포 방식
 
 ### 1️⃣ Vercel (프로덕션)
-- 메인 페이지: https://mp1-now.vercel.app
-- FAQ 챗봇: https://mp1-now.vercel.app/faq
-- API: https://mp1-now.vercel.app/api/faq
-- 관리자: https://mp1-now.vercel.app/admin.html
+- 메인 페이지: https://senior-cert-faq.vercel.app
+- FAQ 챗봇: https://senior-cert-faq.vercel.app/faq
+- API: https://senior-cert-faq.vercel.app/api/faq
+- 관리자: https://senior-cert-faq.vercel.app/admin.html
 
 ### 2️⃣ Hugging Face Spaces (Stage 6 Gradio)
 - 챗봇 탭 (TF-IDF 검색)

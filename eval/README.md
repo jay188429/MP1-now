@@ -1,7 +1,7 @@
 # 챗봇 재측정 (고치기 전 / 고친 뒤)
 
 ```
-node eval/run_eval.cjs      # MP1-now 폴더에서 실행, 결과는 eval/result.txt
+node eval/run_eval.cjs      # senior-cert-faq-chatbot 폴더에서 실행, 결과는 eval/result.txt
 ```
 
 - **질문지**: 강사 제공 교육용 게시판 문의 1,203건의 문의 본문(`body`). 각 문의를 챗봇에 질문으로 넣는다.
