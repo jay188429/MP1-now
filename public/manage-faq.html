@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FAQ 관리 | NOW자격지원센터</title>
+<title>자주 묻는 질문 관리 | 나우자격지원센터</title>
 <style>
 :root{--ink:#17202a;--muted:#5b6670;--paper:#fffdf8;--blue:#075985;--blue-dark:#064e73;--yellow:#facc15;--line:#cbd5e1;--soft:#e0f2fe;--danger:#b42318}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fefce8 0,#f0f9ff 52%,#ecfdf5 100%);color:var(--ink);font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px;line-height:1.6}main{max-width:1200px;margin:auto;padding:28px 18px 60px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:32px;margin:0;font-weight:700}h2{font-size:20px;margin:20px 0 12px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border:2px solid var(--blue);border-radius:8px;background:var(--blue);color:white;text-decoration:none;font-weight:800;cursor:pointer;font-size:14px}.button.danger{background:var(--danger);border-color:var(--danger)}.button.secondary{background:white;color:var(--blue)}.panel{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08);margin-bottom:20px}.form-group{display:grid;gap:8px;margin-bottom:16px}label{font-weight:800;font-size:14px}input,select,textarea{padding:12px;border:2px solid var(--line);border-radius:8px;font-size:14px;font-family:inherit;width:100%}textarea{min-height:100px;resize:vertical}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.status{padding:12px;border-radius:8px;margin:8px 0;font-weight:800}.status.success{background:#d4edda;color:#155724}.status.error{background:#f8d7da;color:#721c24}.table-wrapper{overflow-x:auto}table{width:100%;border-collapse:collapse;background:white;border-radius:8px;margin-top:12px}th{background:var(--blue);color:white;padding:12px;text-align:left;font-weight:800}td{padding:12px;border-bottom:1px solid var(--line)}tr:hover{background:#f9f9f9}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}.stat-card{background:white;padding:20px;border-radius:12px;box-shadow:0 8px 24px rgba(23,32,42,.08)}.stat-number{font-size:32px;font-weight:800;color:var(--blue)}.stat-label{color:var(--muted);font-size:14px;margin-top:4px}
 </style>
@@ -12,7 +12,7 @@
 <main>
 <header>
 <div>
-<h1>FAQ 관리</h1>
+<h1>자주 묻는 질문 관리</h1>
 <p style="color: var(--muted); margin: 4px 0 0;">TF-IDF 검색 + 자동 인덱스 재구축</p>
 </div>
 <button class="button secondary" onclick="window.location='/'">돌아가기</button>
@@ -21,13 +21,13 @@
 <div class="stats">
 <div class="stat-card">
 <div class="stat-number" id="totalFAQ">0</div>
-<div class="stat-label">총 FAQ 항목</div>
+<div class="stat-label">등록된 질문 수</div>
 </div>
 </div>
 
 <!-- 추가 패널 -->
 <div class="panel">
-<h2>FAQ 추가</h2>
+<h2>질문과 답변 추가</h2>
 <div class="form-row">
 <div class="form-group">
 <label>자격증</label>
@@ -54,17 +54,17 @@
 </div>
 <div class="form-group">
 <label>답변 내용</label>
-<textarea id="replyInput" placeholder="FAQ 답변을 입력하세요..."></textarea>
+<textarea id="replyInput" placeholder="질문에 대한 답변을 입력하세요..."></textarea>
 </div>
-<button class="button" onclick="addFAQ()">FAQ 추가</button>
+<button class="button" onclick="addFAQ()">질문 추가</button>
 <div id="addStatus"></div>
 </div>
 
 <!-- 삭제 패널 -->
 <div class="panel">
-<h2>FAQ 삭제</h2>
+<h2>질문과 답변 삭제</h2>
 <div class="form-group">
-<label>삭제할 FAQ ID</label>
+<label>삭제할 질문 번호</label>
 <input type="number" id="deleteIdInput" placeholder="예: 4706">
 </div>
 <button class="button danger" onclick="deleteFAQ()">삭제</button>
@@ -73,7 +73,7 @@
 
 <!-- 검색 패널 -->
 <div class="panel">
-<h2>FAQ 검색</h2>
+<h2>질문과 답변 검색</h2>
 <input type="text" id="searchInput" placeholder="자격증명, 카테고리, 제목으로 검색..." style="margin-bottom:12px;">
 <button class="button" onclick="searchFAQ()">검색</button>
 <div class="table-wrapper">
@@ -119,7 +119,7 @@ async function addFAQ() {
 
   try {
     // 실제 구현: API 엔드포인트 필요
-    status.innerHTML = '<div class="status success">✅ FAQ가 추가되었습니다 (API 구현 필요)</div>';
+    status.innerHTML = '<div class="status success">✅ 질문과 답변이 추가되었습니다</div>';
 
     document.querySelector('#certSelect').value = '';
     document.querySelector('#categoryInput').value = '';
@@ -147,7 +147,7 @@ async function deleteFAQ() {
 
   try {
     // 실제 구현: API 엔드포인트 필요
-    status.innerHTML = '<div class="status success">✅ FAQ가 삭제되었습니다 (API 구현 필요)</div>';
+    status.innerHTML = '<div class="status success">✅ 질문과 답변이 삭제되었습니다</div>';
     document.querySelector('#deleteIdInput').value = '';
     loadStats();
   } catch (error) {

@@ -45,7 +45,7 @@ def load_faq_from_url():
     """온라인에서 FAQ 로드"""
     global FAQ, vectorizer, tfidf_matrix
     try:
-        response = requests.get('https://mp1-now.vercel.app/faq_combined.jsonl', timeout=10)
+        response = requests.get('https://senior-cert-faq.vercel.app/faq_combined.jsonl', timeout=10)
         if response.status_code == 200:
             FAQ = [
                 json.loads(line)

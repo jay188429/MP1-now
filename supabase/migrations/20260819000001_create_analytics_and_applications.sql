@@ -6,7 +6,7 @@ create table if not exists public.applications (
   birth text,
   address text,
   received_at timestamptz default now(),
-  status text default '접수대기',
+  status text default '접수완료',
   route text,
   note text
 );
